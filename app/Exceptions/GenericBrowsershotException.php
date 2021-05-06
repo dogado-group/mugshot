@@ -10,7 +10,7 @@ class GenericBrowsershotException extends \RuntimeException
 {
     public function __construct(string $message = '', Throwable $previous = null)
     {
-        parent::__construct('cloudshot error: ' . $message, 0, $previous);
+        parent::__construct('mugshot error: ' . $message, 0, $previous);
     }
 
 }

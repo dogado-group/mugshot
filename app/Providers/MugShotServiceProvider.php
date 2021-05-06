@@ -8,12 +8,9 @@ use Illuminate\Support\ServiceProvider;
 use Spatie\Browsershot\Browsershot;
 use Spatie\Image\Manipulations;
 
-class BrowserShotServiceProvider  extends ServiceProvider
+class MugShotServiceProvider  extends ServiceProvider
 {
-    /**
-     * @var string
-     */
-    protected string $configFile = '/config/cloudshot.php';
+    protected string $configFile = '/config/mugshot.php';
 
     /**
      * Register the service provider.
@@ -23,7 +20,7 @@ class BrowserShotServiceProvider  extends ServiceProvider
     public function register()
     {
         $this->app->singleton(Browsershot::class, function ($app) {
-            $config = $app->make('config')['cloudshot'];
+            $config = $app->make('config')['mugshot'];
 
             $instance = new Browsershot();
             $instance
@@ -48,7 +45,7 @@ class BrowserShotServiceProvider  extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            $this->configFile => config_path('cloudshot.php')
+            $this->configFile => config_path('mugshot.php')
         ], 'config');
     }
 
