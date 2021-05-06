@@ -37,13 +37,13 @@ class ScreenshotService
         $factory->setUrl($url);
 
         $factory->setSize(
-            $parameters->get('width', config('cloudshot.defaults.width')),
-            $parameters->get('height', config('cloudshot.defaults.height'))
+            $parameters->get('width', config('mugshot.defaults.width')),
+            $parameters->get('height', config('mugshot.defaults.height'))
         );
 
-        $factory->setFileExtension($parameters->get('fileExtension', config('cloudshot.defaults.fileExtension')));
-        $factory->setQuality($parameters->get('quality', config('cloudshot.defaults.quality')));
-        $factory->setDeviceScale($parameters->get('deviceScale', config('cloudshot.defaults.deviceScale')));
+        $factory->setFileExtension($parameters->get('fileExtension', config('mugshot.defaults.fileExtension')));
+        $factory->setQuality($parameters->get('quality', config('mugshot.defaults.quality')));
+        $factory->setDeviceScale($parameters->get('deviceScale', config('mugshot.defaults.deviceScale')));
 
         if ($parameters->has('delay')) {
             $factory->setDelay($parameters->get('delay'));

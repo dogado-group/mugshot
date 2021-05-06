@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'CloudShot'),
+    'name' => env('APP_NAME', 'MugShot'),
 
     /*
     |--------------------------------------------------------------------------
@@ -166,7 +166,7 @@ return [
          * Package Service Providers...
          */
 
-        \App\Providers\BrowserShotServiceProvider::class,
+        \App\Providers\MugShotServiceProvider::class,
 
         /*
          * Application Service Providers...

@@ -61,7 +61,7 @@ return [
 
     'request' => [
 
-        'useragent' => 'cloudshot screenshot bot'
+        'useragent' => 'mugshot screenshot bot'
 
     ],
 

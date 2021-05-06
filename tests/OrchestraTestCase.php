@@ -14,7 +14,7 @@ class OrchestraTestCase extends TestCase
     /**
      * @var string
      */
-    protected $baseUrl = 'http://cloudshot.local';
+    protected $baseUrl = 'http://mugshot.local';
 
     protected function tearDown(): void
     {

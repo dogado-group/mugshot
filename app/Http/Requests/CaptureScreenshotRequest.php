@@ -34,12 +34,12 @@ class CaptureScreenshotRequest extends FormRequest
     {
         return [
             'url' => ['required', 'url'],
-            'width' => ['sometimes', 'integer', 'max:' . config('cloudshot.validation.maxWidth')],
-            'height' => ['sometimes', 'integer', 'max:' . config('cloudshot.validation.maxHeight')],
+            'width' => ['sometimes', 'integer', 'max:' . config('mugshot.validation.maxWidth')],
+            'height' => ['sometimes', 'integer', 'max:' . config('mugshot.validation.maxHeight')],
             'fullPage' => ['sometimes', 'boolean'],
             'deviceScale' => ['sometimes', 'integer', 'between:1,3'],
             'quality' => ['sometimes', 'integer', 'between:30,100'],
-            'delay' => ['sometimes', 'integer', 'max:' . config('cloudshot.validation.delay')],
+            'delay' => ['sometimes', 'integer', 'max:' . config('mugshot.validation.delay')],
             'fileExtension' => [
                 'sometimes',
                 Rule::in(FileInterface::ALLOWED_SCREENSHOT_EXTENSIONS)
