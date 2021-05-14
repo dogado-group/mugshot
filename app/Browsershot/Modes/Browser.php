@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Service\Browsershot\Modes;
+namespace App\Browsershot\Modes;
 
 use App\Contracts\CapturableInterface;
 use App\Entity\Screenshot;
-use App\Service\Browsershot\BrowsershotFactory;
+use App\Browsershot\BrowsershotFactory;
 use Illuminate\Support\Str;
 use League\MimeTypeDetection\GeneratedExtensionToMimeTypeMap;
 use Spatie\TemporaryDirectory\TemporaryDirectory;

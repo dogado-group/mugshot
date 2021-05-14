@@ -8,7 +8,7 @@ use App\Exceptions\GenericBrowsershotException;
 use App\Http\Requests\CaptureScreenshotRequest;
 use App\Http\Resources\Screenshot as ScreenshotResource;
 use App\Entity\Screenshot;
-use App\Service\Browsershot\ScreenshotService;
+use App\Browsershot\ScreenshotService;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Symfony\Component\Process\Exception\ProcessFailedException;
