@@ -1,0 +1,72 @@
+name: Tests
+
+on:
+  push:
+    branches:
+      - "main"
+      - "[0-9].*"
+  pull_request:
+
+jobs:
+  phpunit:
+    strategy:
+      matrix:
+        operatingSystem:
+          - 'ubuntu-latest'
+        phpVersion:
+          - '8.0'
+      fail-fast: false
+
+    name: ${{ matrix.operatingSystem }} | PHP ${{ matrix.phpVersion }}
+    runs-on: ${{ matrix.operatingSystem }}
+
+    env:
+      extensions: curl, fileinfo, gd, mbstring, pdo, pdo_sqlite, sqlite3
+      key: mugshot-cache-develop
+
+    steps:
+      - name: Checkout changes
+        uses: actions/checkout@v2
+
+      - name: Setup extension cache
+        id: ext-cache
+        uses: shivammathur/cache-extensions@v1
+        with:
+          php-version: ${{ matrix.phpVersion }}
+          extensions: ${{ env.extensions }}
+          key: ${{ env.key }}
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.ext-cache.outputs.dir }}
+          key: ${{ steps.ext-cache.outputs.key }}
+          restore-keys: ${{ steps.ext-cache.outputs.key }}
+
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.phpVersion }}
+          extensions: ${{ env.extensions }}
+
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: composer-${{ runner.os }}-${{ matrix.php-version }}-${{ hashFiles('composer.*') }}
+          restore-keys: |
+            composer-${{ runner.os }}-${{ matrix.php-version }}-
+            composer-${{ runner.os }}-
+            composer-
+
+      - name: Install Composer dependencies
+        run: |
+          composer install --no-interaction --no-progress --optimize-autoloader --no-scripts
+
+      - name: Run Linting and Tests
+        run: |
+          ./vendor/bin/phpunit

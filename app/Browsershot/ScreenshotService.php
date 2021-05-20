@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Service\Browsershot;
+namespace App\Browsershot;
 
 use App\Contracts\FileInterface;
 use App\Entity\Screenshot;
-use App\Service\Browsershot\Modes\Browser;
+use App\Browsershot\Modes\Browser;
 use Illuminate\Support\Collection;
 use Spatie\Browsershot\Browsershot;
 

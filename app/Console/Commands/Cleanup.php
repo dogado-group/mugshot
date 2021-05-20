@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use App\Service\Browsershot\FileManager;
+use App\Browsershot\FileManager;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Service\Browsershot;
+namespace App\Browsershot;
 
 use Carbon\Carbon;
 use Illuminate\Contracts\Filesystem\Filesystem as FilesystemContract;
