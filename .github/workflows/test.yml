@@ -13,10 +13,8 @@ jobs:
       matrix:
         operatingSystem:
           - 'ubuntu-latest'
-          # - 'windows-latest'
         phpVersion:
           - '8.0'
-          # - '8.1'
       fail-fast: false
 
     name: ${{ matrix.operatingSystem }} | PHP ${{ matrix.phpVersion }}
