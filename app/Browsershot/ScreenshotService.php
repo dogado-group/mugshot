@@ -16,7 +16,7 @@ class ScreenshotService
     {
     }
 
-    public function execute(string $type, string $url, Collection $parameters): ?FileInterface
+    public function execute(string $type, string $url, Collection $parameters): ?Screenshot
     {
         if ($type === 'screenshot') {
             return $this->screenshot($url, $parameters);

@@ -10,6 +10,13 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\File;
 
+/**
+ * @method exists(string $file)
+ * @method get(string $filename)
+ * @method size(string $filename)
+ * @method url(string $fileName)
+ * @method delete(mixed $path)
+ */
 class FileManager
 {
     public const DISKNAME = 'screenshot';
@@ -53,12 +60,14 @@ class FileManager
 
     public function isExpired(string $file): bool
     {
-        return $this->exists($file) && $this->lastModified($file)->diffInMinutes(new Carbon()) > config('mugshot.defaults.cache');
+        return $this->exists($file)
+            && $this->lastModified($file)->diffInMinutes(new Carbon()) > config('mugshot.defaults.cache');
     }
 
     public function listContentByLastModified(): Collection
     {
-        return Collection::make($this->storage->listContents(null, false))
+        $driver = $this->storage->getDriver();
+        return Collection::make($driver->listContents('', false))
             ->sortBy('size', SORT_DESC)
             ->values();
     }
