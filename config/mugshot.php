@@ -2,6 +2,8 @@
 
 return [
 
+    'redirect' => env('HOMEPAGE_REDIRECT'),
+
     /*
     |--------------------------------------------------------------------------
     | Default Values
