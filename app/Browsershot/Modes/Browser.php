@@ -83,7 +83,7 @@ class Browser extends BrowsershotFactory implements CapturableInterface
 
     /**
      * @param string $url
-     * @return BrowsershotFactory
+     * @return Browser
      */
     public function setUrl(string $url): self
     {
