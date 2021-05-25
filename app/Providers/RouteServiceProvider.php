@@ -20,7 +20,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    public const HOME = '/home';
+    public const HOME = '/';
 
     /**
      * The controller namespace for the application.
@@ -48,14 +48,7 @@ class RouteServiceProvider extends ServiceProvider
 
             Route::middleware('web')
                 ->namespace($this->namespace)
-                ->group(function () {
-                    Route::any('/', function () {
-                        if (App::environment('local')) {
-                            return abort(404);
-                        }
-                        return Redirect::away('https://dogado.de');
-                    })->name('default');
-                });
+                ->group(base_path('routes/web.php'));
         });
     }
 
