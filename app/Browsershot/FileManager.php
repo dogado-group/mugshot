@@ -61,7 +61,7 @@ class FileManager
     public function isExpired(string $file): bool
     {
         return $this->exists($file)
-            && $this->lastModified($file)->diffInMinutes(new Carbon()) > config('mugshot.defaults.cache');
+            && $this->lastModified($file)->diffInMinutes(new Carbon()) > config('mugshot.cache');
     }
 
     public function listContentByLastModified(): Collection
