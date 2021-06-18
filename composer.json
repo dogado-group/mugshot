@@ -10,12 +10,12 @@
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
-        "laravel/framework": "^8.37",
+        "laravel/framework": "^8.47",
         "laravel/sanctum": "^2.9",
         "laravel/tinker": "^2.5",
         "league/mime-type-detection": "^1.7",
         "sentry/sentry-laravel": "^2.4.0",
-        "spatie/browsershot": "^3.44.1"
+        "spatie/browsershot": "^3.47"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
