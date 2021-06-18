@@ -6,9 +6,8 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Spatie\Browsershot\Browsershot;
-use Spatie\Image\Manipulations;
 
-class MugShotServiceProvider  extends ServiceProvider
+class MugShotServiceProvider extends ServiceProvider
 {
     protected string $configFile = '/config/mugshot.php';
 
@@ -22,19 +21,28 @@ class MugShotServiceProvider  extends ServiceProvider
         $this->app->singleton(Browsershot::class, function ($app) {
             $config = $app->make('config')['mugshot'];
 
-            $instance = new Browsershot();
-            $instance
-                ->setNodeBinary($config['puppeteer']['node'])
-                ->setNpmBinary($config['puppeteer']['npm'])
-                ->setProxyServer($config['puppeteer']['proxyServer'])
-                ->setChromePath($config['puppeteer']['chrome'])
+            $instance = (new Browsershot())
                 ->userAgent($config['request']['useragent'])
-                ->ignoreHttpsErrors()
-            ;
+                ->ignoreHttpsErrors();
+
+            if (!is_null($config['puppeteer']['node'])) {
+                $instance->setNodeBinary($config['puppeteer']['node']);
+            }
+            if (!is_null($config['puppeteer']['npm'])) {
+                $instance->setNpmBinary($config['puppeteer']['npm']);
+            }
+            if (!is_null($config['puppeteer']['nodeModulesPath'])) {
+                $instance->setNodeModulePath($config['puppeteer']['nodeModulesPath']);
+            }
+            if (!is_null($config['puppeteer']['chrome'])) {
+                $instance->setChromePath($config['puppeteer']['chrome']);
+            }
+            if (!is_null($config['puppeteer']['proxyServer'])) {
+                $instance->setProxyServer($config['puppeteer']['proxyServer']);
+            }
 
             return $instance;
         });
-
     }
 
     /**
