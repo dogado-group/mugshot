@@ -26,7 +26,7 @@ class Browser extends BrowsershotFactory implements CapturableInterface
         $hash = hash('sha256', Str::slug($this->sanitizeUrl($this->url), '_'));
         $filename = "{$hash}.{$this->fileExtension}";
 
-        if ($this->fileManager->isExpired($filename) || !$this->fileManager->exists($filename)) {
+        if ($this->checkFile($filename)) {
             $tempFile = (new TemporaryDirectory())->create();
             $tempFilePath = $tempFile->path($filename);
 
@@ -90,5 +90,10 @@ class Browser extends BrowsershotFactory implements CapturableInterface
         $this->url = $url;
         $this->browsershot->setUrl($url);
         return $this;
+    }
+
+    public function checkFile(string $filename): bool
+    {
+        return $this->fileManager->isExpired($filename) || !$this->fileManager->exists($filename);
     }
 }
