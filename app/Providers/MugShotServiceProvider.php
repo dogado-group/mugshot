@@ -25,7 +25,7 @@ class MugShotServiceProvider extends ServiceProvider
                 ->userAgent($config['request']['useragent'])
                 ->ignoreHttpsErrors();
 
-            if ( $config['puppeteer']['noSandbox']) {
+            if (!$config['puppeteer']['sandbox']) {
                 $instance->noSandbox();
             }
             if (!is_null($config['puppeteer']['node'])) {

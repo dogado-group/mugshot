@@ -163,12 +163,12 @@ return [
 
         'proxyServer' => env('MUGSHOT_PUPPETEER_PROXY', null),
 
-
         /*
          * Allows you to disable the Sandbox Mode of Puppeteer
          * Keep in Mind: This is considered dangerous and should only be used if you trust the content you are opening.
          */
 
-        'noSandbox' => env('MUGSHOT_PUPPETEER_DISABLE_SANDBOX', false),
+        'sandbox' => env('MUGSHOT_PUPPETEER_SANDBOX', true),
+
     ]
 ];
