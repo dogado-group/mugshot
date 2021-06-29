@@ -16,7 +16,7 @@ class Screenshot implements FileInterface
     public const ATTRIBUTE_SIZE = 'size';
     public const ATTRIBUTE_MIMETYPE = 'mimetype';
     public const ATTRIBUTE_CONTENT = 'content';
-    public const ATTRIBUTE_CREATED_AT = 'created_at';
+    public const ATTRIBUTE_CREATED_AT = 'createdAt';
 
     public ?string $id = null;
 
@@ -28,7 +28,7 @@ class Screenshot implements FileInterface
 
     public ?string $content = null;
 
-    public ?Carbon $created_at = null;
+    public ?Carbon $createdAt = null;
 
     public function fill(array $parameters): self
     {
@@ -103,12 +103,12 @@ class Screenshot implements FileInterface
 
     public function getCreatedAt(): Carbon
     {
-        return $this->created_at;
+        return $this->createdAt;
     }
 
-    public function setCreatedAt(Carbon $created_at): self
+    public function setCreatedAt(Carbon $createdAt): self
     {
-        $this->created_at = $created_at;
+        $this->createdAt = $createdAt;
         return $this;
     }
 }

@@ -19,9 +19,9 @@ use Illuminate\Http\File;
  */
 class FileManager
 {
-    public const DISKNAME = 'screenshot';
-
     protected FilesystemContract $storage;
+
+    public const DISKNAME = 'screenshot';
 
     /**
      * FileManager constructor.

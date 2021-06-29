@@ -27,18 +27,7 @@ class Browser extends BrowsershotFactory implements CapturableInterface
         $filename = "{$hash}.{$this->fileExtension}";
 
         if ($this->checkFile($filename)) {
-            $tempFile = (new TemporaryDirectory())->create();
-            $tempFilePath = $tempFile->path($filename);
-
-            // do the puppeteer magic
-            $this->callPuppeteer($tempFile->path($filename));
-
-            $mimeType = (new GeneratedExtensionToMimeTypeMap())->lookupMimeType($this->fileExtension);
-            $publicUrl = $this->fileManager->save($tempFilePath, $hash, $this->fileExtension);
-
-            $content = file_get_contents($tempFilePath);
-
-            $tempFile->delete();
+            [$mimeType, $publicUrl, $content] = $this->doScreenshot($filename, $hash);
         } else {
             $publicUrl = $this->fileManager->url($filename);
             $content = $this->fileManager->get($filename);
@@ -95,5 +84,29 @@ class Browser extends BrowsershotFactory implements CapturableInterface
     public function checkFile(string $filename): bool
     {
         return $this->fileManager->isExpired($filename) || !$this->fileManager->exists($filename);
+    }
+
+    /**
+     * @param string $filename
+     * @param string $hash
+     * @return array
+     * @throws \Spatie\Browsershot\Exceptions\CouldNotTakeBrowsershot
+     * @throws \Spatie\TemporaryDirectory\Exceptions\PathAlreadyExists
+     */
+    public function doScreenshot(string $filename, string $hash): array
+    {
+        $tempFile = (new TemporaryDirectory())->create();
+        $tempFilePath = $tempFile->path($filename);
+
+        // do the puppeteer magic
+        $this->callPuppeteer($tempFile->path($filename));
+
+        $mimeType = (new GeneratedExtensionToMimeTypeMap())->lookupMimeType($this->fileExtension);
+        $publicUrl = $this->fileManager->save($tempFilePath, $hash, $this->fileExtension);
+
+        $content = file_get_contents($tempFilePath);
+
+        $tempFile->delete();
+        return [$mimeType, $publicUrl, $content];
     }
 }
