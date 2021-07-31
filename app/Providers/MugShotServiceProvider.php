@@ -22,6 +22,7 @@ class MugShotServiceProvider extends ServiceProvider
             $config = $app->make('config')['mugshot'];
 
             $instance = (new Browsershot())
+                ->timeout($config['timeout'])
                 ->userAgent($config['request']['useragent'])
                 ->ignoreHttpsErrors();
 

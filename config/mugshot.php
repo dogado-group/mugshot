@@ -16,6 +16,15 @@ return [
 
     'cache' => env('MUGSHOT_CACHE_TIME', 30),
 
+
+    /*
+     * Specifies when the screenshot process should timeout
+     *
+     * Value in seconds
+     */
+
+    'timeout' => env('MUGSHOT_TIMEOUT', 30),
+
     /*
     |--------------------------------------------------------------------------
     | Default Values
