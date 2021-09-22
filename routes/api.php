@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PdfController;
 use App\Http\Controllers\ScreenshotController;
 use App\Http\Controllers\StatusController;
 use Illuminate\Support\Facades\App;
@@ -16,5 +17,14 @@ Route::group(['prefix' => 'v1'], static function (): void {
 
     Route::post('/screenshot', [ScreenshotController::class, 'capture'])
         ->name('screenshot')
+        ->middleware('auth:sanctum');
+
+    if (App::environment('local')) {
+        Route::get('/pdf', [PdfController::class, 'generate'])
+            ->name('pdf');
+    }
+
+    Route::post('/pdf', [PdfController::class, 'generate'])
+        ->name('pdf')
         ->middleware('auth:sanctum');
 });

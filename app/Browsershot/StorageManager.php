@@ -16,16 +16,14 @@ use Illuminate\Http\File;
  * @method size(string $filename)
  * @method url(string $fileName)
  * @method delete(mixed $path)
+ * @method readStream(string $path)
  */
-class FileManager
+class StorageManager
 {
     protected FilesystemContract $storage;
 
     public const DISKNAME = 'screenshot';
 
-    /**
-     * FileManager constructor.
-     */
     public function __construct()
     {
         $this->storage = Storage::disk(self::DISKNAME);

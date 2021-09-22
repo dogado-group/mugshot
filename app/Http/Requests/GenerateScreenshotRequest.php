@@ -5,32 +5,14 @@ declare(strict_types=1);
 namespace App\Http\Requests;
 
 use App\Contracts\FileInterface;
+use App\Contracts\ResponableInterface;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\App;
 use Illuminate\Validation\Rule;
 
-class CaptureScreenshotRequest extends FormRequest
+class GenerateScreenshotRequest extends AbstractRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        if (App::environment('local')) {
-            return true;
-        }
-
-        return auth()->check();
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
-    public function rules()
+    public function rules(): array
     {
         return [
             'url' => ['required', 'url'],
@@ -46,7 +28,7 @@ class CaptureScreenshotRequest extends FormRequest
             ],
             'response' => [
                 'sometimes',
-                Rule::in(['inline', 'download', 'json'])
+                Rule::in(ResponableInterface::ALLOWED_RESPONSES)
             ],
         ];
     }

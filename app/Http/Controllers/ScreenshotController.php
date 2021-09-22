@@ -4,49 +4,51 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\GenericBrowsershotException;
-use App\Http\Requests\CaptureScreenshotRequest;
-use App\Http\Resources\Screenshot as ScreenshotResource;
+use App\Browsershot\BrowsershotService;
+use App\Contracts\ResponableInterface;
 use App\Entity\Screenshot;
-use App\Browsershot\ScreenshotService;
+use App\Exceptions\GenericBrowsershotException;
+use App\Http\Requests\GenerateScreenshotRequest;
+use App\Http\Resources\Screenshot as ScreenshotResource;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
-class ScreenshotController extends Controller
+class ScreenshotController extends Controller implements ResponableInterface
 {
-    public function __construct(protected ScreenshotService $screenshotService)
+
+    public function __construct(protected BrowsershotService $service)
     {
     }
 
     /**
      * @return ScreenshotResource|Response
      */
-    public function capture(CaptureScreenshotRequest $request)
+    public function capture(GenerateScreenshotRequest $request)
     {
-        $response = $request->get('response', 'inline');
+        $response = $request->get('response', ResponableInterface::INLINE);
         $url = $request->get('url');
         $parameters = Collection::make(
-            $request->only(['width', 'height', 'fullPage', 'deviceScale', 'quality', 'delay', 'fileExtension'])
+            $request->only('width', 'height', 'fullPage', 'deviceScale', 'quality', 'delay', 'fileExtension')
         );
 
         try {
-            $screenshot = $this->screenshotService->execute('screenshot', $url, $parameters);
+            $content = $this->service->execute(BrowsershotService::TYPE_SCREENSHOT, $url, $parameters);
         } catch (ProcessFailedException $exception) {
             throw new GenericBrowsershotException("Generating a screenshot of {$url} failed", $exception);
         }
 
-        return $this->makeResponse($screenshot, $response);
+        return $this->makeResponse($content, $response);
     }
 
     /**
      * @return ScreenshotResource|Response
      */
-    protected function makeResponse(Screenshot $content, string $type = 'inline')
+    protected function makeResponse(Screenshot $content, string $type = ResponableInterface::INLINE)
     {
         return match ($type) {
-            'inline' => $this->responseInline($content),
-            'download' => $this->responseDownload($content),
+            ResponableInterface::INLINE => $this->responseInline($content),
+            ResponableInterface::DOWNLOAD => $this->responseDownload($content),
             default => $this->responseJson($content),
         };
     }
@@ -60,7 +62,7 @@ class ScreenshotController extends Controller
     {
         $headers = [
             'Content-Type' => $screenshot->getMimeType(),
-            'Content-Disposition' => 'inline'
+            'Content-Disposition' => self::INLINE
         ];
 
         return new Response($screenshot->getContent(), Response::HTTP_OK, $headers);
@@ -68,12 +70,10 @@ class ScreenshotController extends Controller
 
     protected function responseDownload(Screenshot $screenshot)
     {
-        $filename = "{$screenshot->getId()}.{$screenshot->getExtension()}";
-
         $headers = [
             'Content-Type' => $screenshot->getMimeType(),
             'Content-Length' => $screenshot->getSize(),
-            'Content-Disposition' => 'attachment; filename="'. $filename .'"'
+            'Content-Disposition' => 'attachment; filename="'. $screenshot->getFilename() .'"'
         ];
 
         return new Response($screenshot->getContent(), Response::HTTP_OK, $headers);

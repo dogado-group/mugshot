@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use App\Browsershot\FileManager;
+use App\Browsershot\StorageManager;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 
@@ -24,14 +24,14 @@ class Cleanup extends Command
      */
     protected $description = 'Cleans the Screenshot Folder';
 
-    private FileManager $fileManager;
+    private StorageManager $fileManager;
 
     /**
      * Create a new command instance.
      *
      * @return void
      */
-    public function __construct(FileManager $fileManager)
+    public function __construct(StorageManager $fileManager)
     {
         $this->fileManager = $fileManager;
 

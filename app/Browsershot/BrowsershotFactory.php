@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace App\Browsershot;
 
+use App\Contracts\FileInterface;
 use Spatie\Browsershot\Browsershot;
 
 abstract class BrowsershotFactory
 {
-    protected int $width;
+    protected int $width = 800;
 
-    protected int $height;
+    protected int $height = 600;
 
-    protected string $fileExtension = 'jpg';
+    protected string $fileExtension = FileInterface::IMAGE_JPEG;
 
     protected int $imageQuality = 70;
 
@@ -20,13 +21,13 @@ abstract class BrowsershotFactory
 
     protected bool $fullPage = false;
 
-    protected int $delay;
+    protected int $delay = 0;
 
     /**
      * @param Browsershot $browsershot
-     * @param FileManager $fileManager
+     * @param StorageManager $storageManager
      */
-    public function __construct(protected Browsershot $browsershot, protected FileManager $fileManager)
+    public function __construct(protected Browsershot $browsershot, protected StorageManager $storageManager)
     {
     }
 
@@ -41,7 +42,7 @@ abstract class BrowsershotFactory
     public function setFileExtension(string $extension = 'png'): self
     {
         if ($extension === 'jpg') {
-            $extension = 'jpeg';
+            $extension = FileInterface::IMAGE_JPEG;
         }
 
         $this->fileExtension = $extension;
@@ -51,7 +52,7 @@ abstract class BrowsershotFactory
 
     public function setQuality(int $quality = 70): self
     {
-        if ($this->fileExtension === 'png') {
+        if ($this->fileExtension === FileInterface::IMAGE_PNG) {
             return $this;
         }
 
@@ -83,11 +84,6 @@ abstract class BrowsershotFactory
         $this->delay = $seconds;
         $this->browsershot->setDelay($seconds * 1000);
         return $this;
-    }
-
-    public function getBrowsershot(): Browsershot
-    {
-        return $this->browsershot;
     }
 
     abstract protected function execute();
