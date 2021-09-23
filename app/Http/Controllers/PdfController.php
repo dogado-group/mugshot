@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Browsershot\BrowsershotService;
+use App\Contracts\FileInterface;
 use App\Contracts\ResponableInterface;
-use App\Entity\Pdf;
 use App\Exceptions\GenericBrowsershotException;
 use App\Http\Requests\GeneratePdfRequest;
 use Illuminate\Http\Response;
@@ -34,13 +34,32 @@ class PdfController extends Controller implements ResponableInterface
         return $this->makeResponse($content, $response);
     }
 
-    protected function makeResponse(Pdf $content, string $type = 'inline')
+    protected function makeResponse(FileInterface $resource, string $type = ResponableInterface::INLINE)
+    {
+        return match ($type) {
+            ResponableInterface::DOWNLOAD => $this->responseDownload($resource),
+            default => $this->responseInline($resource)
+        };
+    }
+
+    protected function responseInline(FileInterface $resource): Response
     {
         $headers = [
-            'Content-Type' => $content->getMimeType(),
+            'Content-Type' => $resource->getMimeType(),
             'Content-Disposition' => self::INLINE
         ];
 
-        return new Response($content->getContent(), Response::HTTP_OK, $headers);
+        return new Response($resource->getContent(), Response::HTTP_OK, $headers);
+    }
+
+    protected function responseDownload(FileInterface $resource)
+    {
+        $headers = [
+            'Content-Type' => $resource->getMimeType(),
+            'Content-Length' => $resource->getSize(),
+            'Content-Disposition' => 'attachment; filename="'. $resource->getFilename() .'"'
+        ];
+
+        return new Response($resource->getContent(), Response::HTTP_OK, $headers);
     }
 }

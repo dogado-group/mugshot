@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Browsershot\BrowsershotService;
+use App\Contracts\FileInterface;
 use App\Contracts\ResponableInterface;
-use App\Entity\Screenshot;
 use App\Exceptions\GenericBrowsershotException;
 use App\Http\Requests\GenerateScreenshotRequest;
 use App\Http\Resources\Screenshot as ScreenshotResource;
@@ -16,7 +16,6 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class ScreenshotController extends Controller implements ResponableInterface
 {
-
     public function __construct(protected BrowsershotService $service)
     {
     }
@@ -44,38 +43,38 @@ class ScreenshotController extends Controller implements ResponableInterface
     /**
      * @return ScreenshotResource|Response
      */
-    protected function makeResponse(Screenshot $content, string $type = ResponableInterface::INLINE)
+    protected function makeResponse(FileInterface $resource, string $type = ResponableInterface::INLINE)
     {
         return match ($type) {
-            ResponableInterface::INLINE => $this->responseInline($content),
-            ResponableInterface::DOWNLOAD => $this->responseDownload($content),
-            default => $this->responseJson($content),
+            ResponableInterface::INLINE => $this->responseInline($resource),
+            ResponableInterface::DOWNLOAD => $this->responseDownload($resource),
+            default => $this->responseJson($resource),
         };
     }
 
-    protected function responseJson(Screenshot $screenshot): ScreenshotResource
+    protected function responseJson(FileInterface $resource): ScreenshotResource
     {
-        return new ScreenshotResource($screenshot);
+        return new ScreenshotResource($resource);
     }
 
-    protected function responseInline(Screenshot $screenshot): Response
+    protected function responseInline(FileInterface $resource): Response
     {
         $headers = [
-            'Content-Type' => $screenshot->getMimeType(),
+            'Content-Type' => $resource->getMimeType(),
             'Content-Disposition' => self::INLINE
         ];
 
-        return new Response($screenshot->getContent(), Response::HTTP_OK, $headers);
+        return new Response($resource->getContent(), Response::HTTP_OK, $headers);
     }
 
-    protected function responseDownload(Screenshot $screenshot)
+    protected function responseDownload(FileInterface $resource)
     {
         $headers = [
-            'Content-Type' => $screenshot->getMimeType(),
-            'Content-Length' => $screenshot->getSize(),
-            'Content-Disposition' => 'attachment; filename="'. $screenshot->getFilename() .'"'
+            'Content-Type' => $resource->getMimeType(),
+            'Content-Length' => $resource->getSize(),
+            'Content-Disposition' => 'attachment; filename="'. $resource->getFilename() .'"'
         ];
 
-        return new Response($screenshot->getContent(), Response::HTTP_OK, $headers);
+        return new Response($resource->getContent(), Response::HTTP_OK, $headers);
     }
 }
