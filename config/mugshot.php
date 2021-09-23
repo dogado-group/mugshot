@@ -14,7 +14,7 @@ return [
      * Value in minutes
      */
 
-    'cache' => env('MUGSHOT_CACHE_TIME', 30),
+    'cache' => (int) env('MUGSHOT_CACHE_TIME', 30),
 
 
     /*
@@ -23,7 +23,7 @@ return [
      * Value in seconds
      */
 
-    'timeout' => env('MUGSHOT_TIMEOUT', 30),
+    'timeout' => (int) env('MUGSHOT_TIMEOUT', 30),
 
     /*
     |--------------------------------------------------------------------------
@@ -127,7 +127,7 @@ return [
          * If you want to specify a custom UserAgent, here is the opportunity to do so
          */
 
-        'useragent' => 'mugshot screenshot bot'
+        'useragent' => 'mugshot screenshot service'
 
     ],
 
@@ -144,33 +144,33 @@ return [
          * usually it is `/usr/bin/node` or `C:\\nodejs\\node.exe` for Windows
          */
 
-        'node' => env('MUGSHOT_BINARY_NODE', null),
+        'node' => env('MUGSHOT_BINARY_NODE'),
 
         /*
          * Path to the npm binary
          * mostly usually `/usr/bin/npm` or `C:\\nodejs\\npm.cmd` for Windows
          */
 
-        'npm' => env('MUGSHOT_BINARY_NPM', null),
+        'npm' => env('MUGSHOT_BINARY_NPM'),
 
         /*
          * Here you may specify your custom Node modules Path if you prefer not to use
          * the global installation of Puppeteer
          */
 
-        'nodeModulesPath' => env('MUGSHOT_NODE_MODULES_PATH', null),
+        'nodeModulesPath' => env('MUGSHOT_NODE_MODULES_PATH'),
 
         /*
          * Here you may specify your custom Chrome Executable
          */
 
-        'chrome' => env('MUGSHOT_BINARY_CHROME', null),
+        'chrome' => env('MUGSHOT_BINARY_CHROME'),
 
         /*
          * Here you may specify your custom Puppeteer Proxy Settings
          */
 
-        'proxyServer' => env('MUGSHOT_PUPPETEER_PROXY', null),
+        'proxyServer' => env('MUGSHOT_PUPPETEER_PROXY'),
 
         /*
          * Allows you to disable the Sandbox Mode of Puppeteer
@@ -178,6 +178,15 @@ return [
          */
 
         'sandbox' => env('MUGSHOT_PUPPETEER_SANDBOX', true),
+
+        /*
+         * If you prefer to use a remote Chrome instance, such as a Docker instance, you can configure it here
+         */
+
+        'remoteChromeInstance' => [
+            'host' => env('MUGSHOT_REMOTE_CHROME_HOST', ''),
+            'port' => (int) env('MUGSHOT_REMOTE_CHROME_PORT', 9222),
+        ]
 
     ]
 ];

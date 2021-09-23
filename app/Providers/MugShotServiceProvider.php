@@ -11,11 +11,6 @@ class MugShotServiceProvider extends ServiceProvider
 {
     protected string $configFile = '/config/mugshot.php';
 
-    /**
-     * Register the service provider.
-     *
-     * @return void
-     */
     public function register()
     {
         $this->app->singleton(Browsershot::class, function ($app) {
@@ -45,15 +40,20 @@ class MugShotServiceProvider extends ServiceProvider
                 $instance->setProxyServer($config['puppeteer']['proxyServer']);
             }
 
+            if (
+                !empty($config['puppeteer']['remoteChromeInstance']['host'])
+                && !empty($config['puppeteer']['remoteChromeInstance']['port'])
+            ) {
+                $instance->setRemoteInstance(
+                    $config['puppeteer']['remoteChromeInstance']['host'],
+                    $config['puppeteer']['remoteChromeInstance']['port'],
+                );
+            }
+
             return $instance;
         });
     }
 
-    /**
-     * Bootstrap's Package Services
-     *
-     * @return void
-     */
     public function boot()
     {
         $this->publishes([
@@ -61,11 +61,6 @@ class MugShotServiceProvider extends ServiceProvider
         ], 'config');
     }
 
-    /**
-     * Services provided by this provider
-     *
-     * @return array
-     */
     public function provides()
     {
         return [Browsershot::class];
