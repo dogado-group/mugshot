@@ -1,7 +1,10 @@
 # dogado MugShot
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/dogado/mugshot.svg?style=flat-square)](https://packagist.org/packages/dogado/mugshot)
 [![Tests](https://github.com/dogado-group/mugshot/actions/workflows/test.yml/badge.svg)](https://github.com/dogado-group/mugshot/actions/workflows/test.yml)
+[![Coverage Status](https://coveralls.io/repos/github/dogado-group/mugshot/badge.svg?branch=main)](https://coveralls.io/github/dogado-group/mugshot?branch=main)
+[![Total Downloads](https://poser.pugx.org/dogado/mugshot/downloads)](https://packagist.org/packages/dogado/mugshot)
+[![Latest Stable Version](https://poser.pugx.org/dogado/mugshot/v/stable)](https://packagist.org/packages/dogado/mugshot)
+[![License](https://poser.pugx.org/dogado/mugshot/license)](https://packagist.org/packages/dogado/mugshot)
 
 A small service that helps you take screenshots of web pages.
 
@@ -36,17 +39,17 @@ npm install puppeteer --global
 POST /api/v1/screenshot
 ```
 
-| Parameter           | Type       | Description                |
-| :------------------ | :--------- | :------------------------- |
-| `url`               | `string`   | URL of the page you want to capture |
-| `width`             | `integer`  | Width of the Picture |
-| `height`            | `integer`  | Height of the Picture |
-| `fullPage`          | `boolean`  | Captures the entire page and, ignores width and height |
-| `deviceScale`       | `integer`  | Between 1 and 3  |
-| `quality`           | `integer`  | Only works with JPG, uses percent |
-| `delay`             | `integer`  | Wait in seconds before taking a picture of the page |
-| `fileExtension`     | `string`   | `PNG` or `JPG`  |
-| `response`          | `string`   | `inline`, `download`, `json` |
+| Parameter           | Type       | Description                                            |
+| :------------------ | :--------- | :----------------------------------------------------- |
+| `url`               | `string`   | URL of the page you want to capture                    |
+| `width`             | `integer`  | Width of the screenshot                                |
+| `height`            | `integer`  | Height of the screenshot                               |
+| `fullPage`          | `boolean`  | Allows you to capture the entire page                  |
+| `deviceScale`       | `integer`  | Between 1 and 3                                        |
+| `quality`           | `integer`  | Only works with JPG, uses percent                      |
+| `delay`             | `integer`  | Wait in seconds before taking a screenshot of the page |
+| `fileExtension`     | `string`   | `PNG` or `JPG`                                         |
+| `response`          | `string`   | `inline`, `download`, `json`                           |
 
 ### Status Check
 

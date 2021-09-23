@@ -6,42 +6,54 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Spatie\Browsershot\Browsershot;
-use Spatie\Image\Manipulations;
 
-class MugShotServiceProvider  extends ServiceProvider
+class MugShotServiceProvider extends ServiceProvider
 {
     protected string $configFile = '/config/mugshot.php';
 
-    /**
-     * Register the service provider.
-     *
-     * @return void
-     */
     public function register()
     {
         $this->app->singleton(Browsershot::class, function ($app) {
             $config = $app->make('config')['mugshot'];
 
-            $instance = new Browsershot();
-            $instance
-                ->setNodeBinary($config['puppeteer']['node'])
-                ->setNpmBinary($config['puppeteer']['npm'])
-                ->setProxyServer($config['puppeteer']['proxyServer'])
-                ->setChromePath($config['puppeteer']['chrome'])
+            $instance = (new Browsershot())
+                ->timeout($config['timeout'])
                 ->userAgent($config['request']['useragent'])
-                ->ignoreHttpsErrors()
-            ;
+                ->ignoreHttpsErrors();
+
+            if (!$config['puppeteer']['sandbox']) {
+                $instance->noSandbox();
+            }
+            if (!empty($config['puppeteer']['node'])) {
+                $instance->setNodeBinary($config['puppeteer']['node']);
+            }
+            if (!empty($config['puppeteer']['npm'])) {
+                $instance->setNpmBinary($config['puppeteer']['npm']);
+            }
+            if (!empty($config['puppeteer']['nodeModulesPath'])) {
+                $instance->setNodeModulePath($config['puppeteer']['nodeModulesPath']);
+            }
+            if (!empty($config['puppeteer']['chrome'])) {
+                $instance->setChromePath($config['puppeteer']['chrome']);
+            }
+            if (!empty($config['puppeteer']['proxyServer'])) {
+                $instance->setProxyServer($config['puppeteer']['proxyServer']);
+            }
+
+            if (
+                !empty($config['puppeteer']['remoteChromeInstance']['host'])
+                && !empty($config['puppeteer']['remoteChromeInstance']['port'])
+            ) {
+                $instance->setRemoteInstance(
+                    $config['puppeteer']['remoteChromeInstance']['host'],
+                    $config['puppeteer']['remoteChromeInstance']['port'],
+                );
+            }
 
             return $instance;
         });
-
     }
 
-    /**
-     * Bootstrap's Package Services
-     *
-     * @return void
-     */
     public function boot()
     {
         $this->publishes([
@@ -49,11 +61,6 @@ class MugShotServiceProvider  extends ServiceProvider
         ], 'config');
     }
 
-    /**
-     * Services provided by this provider
-     *
-     * @return array
-     */
     public function provides()
     {
         return [Browsershot::class];

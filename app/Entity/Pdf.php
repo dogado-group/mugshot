@@ -9,7 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use Symfony\Component\Mime\MimeTypes;
 
-class Screenshot implements FileInterface
+class Pdf implements FileInterface
 {
     public const ATTRIBUTE_ID = 'id';
     public const ATTRIBUTE_URL = 'url';

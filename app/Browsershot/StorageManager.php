@@ -16,16 +16,14 @@ use Illuminate\Http\File;
  * @method size(string $filename)
  * @method url(string $fileName)
  * @method delete(mixed $path)
+ * @method readStream(string $path)
  */
-class FileManager
+class StorageManager
 {
-    public const DISKNAME = 'screenshot';
-
     protected FilesystemContract $storage;
 
-    /**
-     * FileManager constructor.
-     */
+    public const DISKNAME = 'screenshot';
+
     public function __construct()
     {
         $this->storage = Storage::disk(self::DISKNAME);
@@ -61,7 +59,7 @@ class FileManager
     public function isExpired(string $file): bool
     {
         return $this->exists($file)
-            && $this->lastModified($file)->diffInMinutes(new Carbon()) > config('mugshot.defaults.cache');
+            && $this->lastModified($file)->diffInMinutes(new Carbon()) > config('mugshot.cache');
     }
 
     public function listContentByLastModified(): Collection

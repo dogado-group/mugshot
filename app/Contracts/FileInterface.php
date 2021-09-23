@@ -13,4 +13,11 @@ interface FileInterface
         self::IMAGE_JPEG,
         self::IMAGE_PNG
     ];
+    public function getMimeType(): string;
+
+    public function getSize(): int;
+
+    public function getFilename(): string;
+
+    public function getContent(): string;
 }
