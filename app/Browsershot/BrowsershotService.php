@@ -39,8 +39,8 @@ class BrowsershotService
         $factory->setUrl($url);
 
         $factory->setSize(
-            $parameters->get('width', config('mugshot.defaults.width')),
-            $parameters->get('height', config('mugshot.defaults.height'))
+            (int) $parameters->get('width', config('mugshot.defaults.width')),
+            (int) $parameters->get('height', config('mugshot.defaults.height'))
         );
 
         $factory->setFileExtension($parameters->get('fileExtension', config('mugshot.defaults.fileExtension')));

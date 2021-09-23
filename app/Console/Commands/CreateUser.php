@@ -14,11 +14,6 @@ class CreateUser extends Command
 
     protected $description = 'Create a user with API Key';
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     public function handle()
     {
         $name = $this->option('name');

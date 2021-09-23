@@ -24,19 +24,19 @@ class MugShotServiceProvider extends ServiceProvider
             if (!$config['puppeteer']['sandbox']) {
                 $instance->noSandbox();
             }
-            if (!is_null($config['puppeteer']['node'])) {
+            if (!empty($config['puppeteer']['node'])) {
                 $instance->setNodeBinary($config['puppeteer']['node']);
             }
-            if (!is_null($config['puppeteer']['npm'])) {
+            if (!empty($config['puppeteer']['npm'])) {
                 $instance->setNpmBinary($config['puppeteer']['npm']);
             }
-            if (!is_null($config['puppeteer']['nodeModulesPath'])) {
+            if (!empty($config['puppeteer']['nodeModulesPath'])) {
                 $instance->setNodeModulePath($config['puppeteer']['nodeModulesPath']);
             }
-            if (!is_null($config['puppeteer']['chrome'])) {
+            if (!empty($config['puppeteer']['chrome'])) {
                 $instance->setChromePath($config['puppeteer']['chrome']);
             }
-            if (!is_null($config['puppeteer']['proxyServer'])) {
+            if (!empty($config['puppeteer']['proxyServer'])) {
                 $instance->setProxyServer($config['puppeteer']['proxyServer']);
             }
 

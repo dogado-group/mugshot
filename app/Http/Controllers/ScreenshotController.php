@@ -23,7 +23,7 @@ class ScreenshotController extends Controller implements ResponableInterface
     /**
      * @return ScreenshotResource|Response
      */
-    public function capture(GenerateScreenshotRequest $request)
+    public function generate(GenerateScreenshotRequest $request): Response|ScreenshotResource
     {
         $response = $request->get('response', ResponableInterface::INLINE);
         $url = $request->get('url');
@@ -43,7 +43,7 @@ class ScreenshotController extends Controller implements ResponableInterface
     /**
      * @return ScreenshotResource|Response
      */
-    protected function makeResponse(FileInterface $resource, string $type = ResponableInterface::INLINE)
+    protected function makeResponse(FileInterface $resource, string $type = ResponableInterface::INLINE): Response|ScreenshotResource
     {
         return match ($type) {
             ResponableInterface::INLINE => $this->responseInline($resource),
@@ -67,7 +67,7 @@ class ScreenshotController extends Controller implements ResponableInterface
         return new Response($resource->getContent(), Response::HTTP_OK, $headers);
     }
 
-    protected function responseDownload(FileInterface $resource)
+    protected function responseDownload(FileInterface $resource): Response
     {
         $headers = [
             'Content-Type' => $resource->getMimeType(),

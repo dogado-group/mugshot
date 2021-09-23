@@ -19,7 +19,7 @@ class PdfController extends Controller implements ResponableInterface
     {
     }
 
-    public function generate(GeneratePdfRequest $request)
+    public function generate(GeneratePdfRequest $request): Response
     {
         $response = $request->get('response', ResponableInterface::INLINE);
         $content = $request->get('content');
@@ -34,7 +34,7 @@ class PdfController extends Controller implements ResponableInterface
         return $this->makeResponse($content, $response);
     }
 
-    protected function makeResponse(FileInterface $resource, string $type = ResponableInterface::INLINE)
+    protected function makeResponse(FileInterface $resource, string $type = ResponableInterface::INLINE): Response
     {
         return match ($type) {
             ResponableInterface::DOWNLOAD => $this->responseDownload($resource),
@@ -52,7 +52,7 @@ class PdfController extends Controller implements ResponableInterface
         return new Response($resource->getContent(), Response::HTTP_OK, $headers);
     }
 
-    protected function responseDownload(FileInterface $resource)
+    protected function responseDownload(FileInterface $resource): Response
     {
         $headers = [
             'Content-Type' => $resource->getMimeType(),

@@ -39,7 +39,7 @@ abstract class BrowsershotFactory
         return $this;
     }
 
-    public function setFileExtension(string $extension = 'png'): self
+    public function setFileExtension(string $extension = FileInterface::IMAGE_PNG): self
     {
         if ($extension === 'jpg') {
             $extension = FileInterface::IMAGE_JPEG;

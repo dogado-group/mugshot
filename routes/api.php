@@ -11,11 +11,11 @@ Route::group(['prefix' => 'v1'], static function (): void {
         ->name('status');
 
     if (App::environment('local')) {
-        Route::get('/screenshot', [ScreenshotController::class, 'capture'])
+        Route::get('/screenshot', [ScreenshotController::class, 'generate'])
             ->name('screenshot');
     }
 
-    Route::post('/screenshot', [ScreenshotController::class, 'capture'])
+    Route::post('/screenshot', [ScreenshotController::class, 'generate'])
         ->name('screenshot')
         ->middleware('auth:sanctum');
 
