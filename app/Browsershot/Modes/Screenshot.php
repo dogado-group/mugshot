@@ -72,10 +72,7 @@ class Screenshot extends BrowsershotFactory implements CapturableInterface
     protected function callPuppeteer(string $tempFile): void
     {
         $this->browsershot
-            // make Puppeteer hopefully usable for every page
             ->ignoreHttpsErrors()
-            ->dismissDialogs()
-            ->waitUntilNetworkIdle()
             ->save($tempFile);
     }
 
