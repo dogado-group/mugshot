@@ -10,7 +10,7 @@
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
-        "laravel/framework": "^8.47",
+        "laravel/framework": "^8.63",
         "laravel/sanctum": "^2.9",
         "laravel/tinker": "^2.5",
         "league/mime-type-detection": "^1.7",
