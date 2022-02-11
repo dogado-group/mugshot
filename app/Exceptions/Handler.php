@@ -10,7 +10,7 @@ class Handler extends ExceptionHandler
     /**
      * A list of the exception types that are not reported.
      *
-     * @var array
+     * @var array<int, class-string<Throwable>>
      */
     protected $dontReport = [
         //
@@ -19,7 +19,7 @@ class Handler extends ExceptionHandler
     /**
      * A list of the inputs that are never flashed for validation exceptions.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $dontFlash = [
         'current_password',
@@ -39,6 +39,14 @@ class Handler extends ExceptionHandler
         });
     }
 
+    /**
+     * Report or log an exception.
+     *
+     * @param  \Throwable  $e
+     * @return void
+     *
+     * @throws \Throwable
+     */
     public function report(Throwable $e)
     {
         if ($this->shouldReport($e) && app()->bound('sentry')) {
