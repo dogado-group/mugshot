@@ -16,7 +16,7 @@ use League\Flysystem\StorageAttributes;
  * @method get(string $filename)
  * @method size(string $filename)
  * @method url(string $fileName)
- * @method delete(mixed $path)
+ * @method delete(string|array $path)
  * @method readStream(string $path)
  */
 class StorageManager

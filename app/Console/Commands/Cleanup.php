@@ -7,6 +7,7 @@ namespace App\Console\Commands;
 use App\Browsershot\StorageManager;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Collection;
 use League\Flysystem\FileAttributes;
 
 class Cleanup extends Command
@@ -56,7 +57,7 @@ class Cleanup extends Command
 
         $count = $content->count();
 
-        $content->each(callback: fn(FileAttributes $file) => $this->fileManager->delete($file['path']));
+        $content->each(fn(FileAttributes $file) => $this->fileManager->delete($file->path()));
 
         $this->info("Deleted $count screenshots that were over $days days old.");
 

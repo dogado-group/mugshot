@@ -10,6 +10,13 @@ use App\Entity\Screenshot as ScreenshotModel;
 class Screenshot extends JsonResource
 {
     /**
+     * The resource instance.
+     *
+     * @var \App\Entity\Screenshot
+     */
+    public $resource;
+
+    /**
      * Transform the resource into an array.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -19,10 +26,10 @@ class Screenshot extends JsonResource
     {
         return [
             'type' => 'screenshot',
-            'id' => $this->getId(),
+            'id' => $this->resource->getId(),
             'attributes' => [
-                ScreenshotModel::ATTRIBUTE_URL => $this->getUrl(),
-                ScreenshotModel::ATTRIBUTE_CREATED_AT => $this->getCreatedAt()->toAtomString()
+                ScreenshotModel::ATTRIBUTE_URL => $this->resource->getUrl(),
+                ScreenshotModel::ATTRIBUTE_CREATED_AT => $this->resource->getCreatedAt()->toAtomString()
             ]
         ];
     }
