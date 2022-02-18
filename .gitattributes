@@ -4,6 +4,12 @@
 *.js linguist-vendored
 CHANGELOG.md export-ignore
 
+*.blade.php diff=html
+*.css diff=css
+*.html diff=html
+*.md diff=markdown
+*.php diff=php
+
 /.github/ export-ignore
 /tests/ export-ignore
 /.editorconfig export-ignore

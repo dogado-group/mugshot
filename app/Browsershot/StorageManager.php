@@ -9,13 +9,14 @@ use Illuminate\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\File;
+use League\Flysystem\StorageAttributes;
 
 /**
  * @method exists(string $file)
  * @method get(string $filename)
  * @method size(string $filename)
  * @method url(string $fileName)
- * @method delete(mixed $path)
+ * @method delete(string|array $path)
  * @method readStream(string $path)
  */
 class StorageManager
@@ -62,12 +63,13 @@ class StorageManager
             && $this->lastModified($file)->diffInMinutes(new Carbon()) > config('mugshot.cache');
     }
 
-    public function listContentByLastModified(): Collection
+    public function listContent(): Collection
     {
         $driver = $this->storage->getDriver();
-        return Collection::make($driver->listContents('', false))
-            ->sortBy('size', SORT_DESC)
-            ->values();
+
+        return Collection::make($driver->listContents('', false)
+            ->filter(fn (StorageAttributes $attributes) => $attributes->isFile())
+            ->toArray());
     }
 
     public function __call($method, array $parameters)

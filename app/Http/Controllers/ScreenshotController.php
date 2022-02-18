@@ -6,7 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Browsershot\BrowsershotService;
 use App\Contracts\FileInterface;
-use App\Contracts\ResponableInterface;
+use App\Contracts\ResponsableInterface;
 use App\Exceptions\GenericBrowsershotException;
 use App\Http\Requests\GenerateScreenshotRequest;
 use App\Http\Resources\Screenshot as ScreenshotResource;
@@ -14,7 +14,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
-class ScreenshotController extends Controller implements ResponableInterface
+class ScreenshotController extends Controller implements ResponsableInterface
 {
     public function __construct(protected BrowsershotService $service)
     {
@@ -25,7 +25,7 @@ class ScreenshotController extends Controller implements ResponableInterface
      */
     public function generate(GenerateScreenshotRequest $request): Response|ScreenshotResource
     {
-        $response = $request->get('response', ResponableInterface::INLINE);
+        $response = $request->get('response', ResponsableInterface::INLINE);
         $url = $request->get('url');
         $parameters = Collection::make(
             $request->only('width', 'height', 'fullPage', 'deviceScale', 'quality', 'delay', 'fileExtension')
@@ -43,11 +43,11 @@ class ScreenshotController extends Controller implements ResponableInterface
     /**
      * @return ScreenshotResource|Response
      */
-    protected function makeResponse(FileInterface $resource, string $type = ResponableInterface::INLINE): Response|ScreenshotResource
+    protected function makeResponse(FileInterface $resource, string $type = ResponsableInterface::INLINE): Response|ScreenshotResource
     {
         return match ($type) {
-            ResponableInterface::INLINE => $this->responseInline($resource),
-            ResponableInterface::DOWNLOAD => $this->responseDownload($resource),
+            ResponsableInterface::INLINE => $this->responseInline($resource),
+            ResponsableInterface::DOWNLOAD => $this->responseDownload($resource),
             default => $this->responseJson($resource),
         };
     }

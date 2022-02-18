@@ -7,6 +7,8 @@ namespace App\Console\Commands;
 use App\Browsershot\StorageManager;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Collection;
+use League\Flysystem\FileAttributes;
 
 class Cleanup extends Command
 {
@@ -15,7 +17,7 @@ class Cleanup extends Command
      *
      * @var string
      */
-    protected $signature = 'app:cleanup {days=30}';
+    protected $signature = 'mugshot:cleanup {days=30}';
 
     /**
      * The console command description.
@@ -47,15 +49,18 @@ class Cleanup extends Command
     {
         $days = (int)$this->argument('days');
 
-        $this->fileManager->listContentByLastModified()
-            ->map(callback: function ($file) {
-                $file['timestamp'] = Carbon::createFromTimestamp($file['timestamp']);
-                return $file;
-            })
-            ->filter(callback: fn($file) => $file['timestamp']->lt(Carbon::now()->subDays($days)))
-            ->each(callback: fn($file) => $this->fileManager->delete($file['path']));
+        $content = $this->fileManager->listContent()
+            ->filter(function (FileAttributes $file) use ($days): bool {
+                return Carbon::createFromTimestamp($file->lastModified())
+                    ->lt(Carbon::now()->subDays($days));
+            });
 
-        $this->info("All screenshots older than " . $days . ' days have been deleted');
+        $count = $content->count();
+
+        $content->each(fn(FileAttributes $file) => $this->fileManager->delete($file->path()));
+
+        $this->info("Deleted $count screenshots that were over $days days old.");
+
         return 0;
     }
 }

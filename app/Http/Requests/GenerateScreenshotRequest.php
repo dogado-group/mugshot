@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Requests;
 
 use App\Contracts\FileInterface;
-use App\Contracts\ResponableInterface;
+use App\Contracts\ResponsableInterface;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\App;
 use Illuminate\Validation\Rule;
@@ -28,7 +28,7 @@ class GenerateScreenshotRequest extends AbstractRequest
             ],
             'response' => [
                 'sometimes',
-                Rule::in(ResponableInterface::ALLOWED_RESPONSES)
+                Rule::in(ResponsableInterface::ALLOWED_RESPONSES)
             ],
         ];
     }

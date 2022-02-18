@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Contracts;
 
-interface ResponableInterface
+interface ResponsableInterface
 {
     public const JSON = 'json';
     public const INLINE = 'inline';
