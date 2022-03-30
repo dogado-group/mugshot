@@ -168,6 +168,7 @@ return [
          * Package Service Providers...
          */
 
+        \App\Providers\HealthCheckServiceProvider::class,
         \App\Providers\MugShotServiceProvider::class,
 
         /*
