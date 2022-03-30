@@ -6,14 +6,14 @@ namespace App\Http\Controllers;
 
 use App\Browsershot\BrowsershotService;
 use App\Contracts\FileInterface;
-use App\Contracts\ResponableInterface;
+use App\Contracts\ResponsableInterface;
 use App\Exceptions\GenericBrowsershotException;
 use App\Http\Requests\GeneratePdfRequest;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
-class PdfController extends Controller implements ResponableInterface
+class PdfController extends Controller implements ResponsableInterface
 {
     public function __construct(protected BrowsershotService $service)
     {
@@ -21,7 +21,7 @@ class PdfController extends Controller implements ResponableInterface
 
     public function generate(GeneratePdfRequest $request): Response
     {
-        $response = $request->get('response', ResponableInterface::INLINE);
+        $response = $request->get('response', ResponsableInterface::INLINE);
         $content = $request->get('content');
         $parameters = Collection::make();
 
@@ -34,10 +34,10 @@ class PdfController extends Controller implements ResponableInterface
         return $this->makeResponse($content, $response);
     }
 
-    protected function makeResponse(FileInterface $resource, string $type = ResponableInterface::INLINE): Response
+    protected function makeResponse(FileInterface $resource, string $type = ResponsableInterface::INLINE): Response
     {
         return match ($type) {
-            ResponableInterface::DOWNLOAD => $this->responseDownload($resource),
+            ResponsableInterface::DOWNLOAD => $this->responseDownload($resource),
             default => $this->responseInline($resource)
         };
     }

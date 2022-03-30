@@ -4,28 +4,26 @@
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": "^8.0",
-        "ext-json": "*",
+        "php": "^8.0.2",
         "ext-exif": "*",
-        "fideloper/proxy": "^4.4",
-        "fruitcake/laravel-cors": "^2.0",
-        "guzzlehttp/guzzle": "^7.0.1",
-        "laravel/framework": "^8.63",
-        "laravel/sanctum": "^2.9",
-        "laravel/tinker": "^2.5",
-        "league/mime-type-detection": "^1.7",
+        "ext-json": "*",
+        "guzzlehttp/guzzle": "^7.2",
+        "laravel/framework": "^9.2",
+        "laravel/sanctum": "^2.14.1",
+        "laravel/tinker": "^2.7",
+        "league/mime-type-detection": "^1.9",
         "sentry/sentry-laravel": "^2.4.0",
-        "spatie/browsershot": "^3.47"
+        "spatie/browsershot": "^3.52.3",
+        "spatie/laravel-health": "^1.8"
     },
     "require-dev": {
-        "facade/ignition": "^2.5",
         "fakerphp/faker": "^1.14.1",
-        "laravel/sail": "^1.8",
-        "mockery/mockery": "^1.4.2",
-        "nunomaduro/collision": "^5.0",
-        "nunomaduro/larastan": "^0.7.5",
-        "orchestra/testbench": "^6.17",
-        "phpunit/phpunit": "^9.3.3"
+        "laravel/sail": "1.8",
+        "mockery/mockery": "^1.4.4",
+        "nunomaduro/collision": "^6.1",
+        "nunomaduro/larastan": "^2.0",
+        "phpunit/phpunit": "^9.5",
+        "spatie/laravel-ignition": "^1.0"
     },
     "autoload": {
         "psr-4": {
@@ -43,6 +41,9 @@
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
+        ],
+        "post-update-cmd": [
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
         ],
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""

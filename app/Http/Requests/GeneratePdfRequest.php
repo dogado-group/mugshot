@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
-use App\Contracts\ResponableInterface;
+use App\Contracts\ResponsableInterface;
 use Illuminate\Validation\Rule;
 
 class GeneratePdfRequest extends AbstractRequest
@@ -15,7 +15,7 @@ class GeneratePdfRequest extends AbstractRequest
             'content' => ['required'],
             'response' => [
                 'sometimes',
-                Rule::in(ResponableInterface::ALLOWED_RESPONSES)
+                Rule::in(ResponsableInterface::ALLOWED_RESPONSES)
             ],
         ];
     }
