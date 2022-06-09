@@ -13,7 +13,7 @@
         "laravel/tinker": "^2.7",
         "league/mime-type-detection": "^1.9",
         "sentry/sentry-laravel": "^2.4.0",
-        "spatie/browsershot": "^3.52.3",
+        "spatie/browsershot": "^3.54.0",
         "spatie/laravel-health": "^1.8"
     },
     "require-dev": {
