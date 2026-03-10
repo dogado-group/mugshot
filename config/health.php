@@ -33,7 +33,7 @@ return [
         /*
          * Notifications will only get sent if this option is set to `true`.
          */
-        'enabled' => true,
+        'enabled' => false,
 
         'notifications' => [
             Spatie\Health\Notifications\CheckFailedNotification::class => ['mail'],
