@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Browsershot\Modes;
 
 use App\Browsershot\BrowsershotFactory;
-use App\Entity\Pdf as PdfEntity;
+use App\DataTransferObject\PdfData;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
@@ -14,7 +14,7 @@ class Pdf extends BrowsershotFactory
 {
     public HtmlString $content;
 
-    public function execute(): PdfEntity
+    public function execute(): PdfData
     {
         $hash = hash('sha256', Str::random());
         $filename = "{$hash}.pdf";
@@ -23,13 +23,13 @@ class Pdf extends BrowsershotFactory
 
         $size = $this->storageManager->size($filename);
 
-        return (new PdfEntity())->fill([
-            PdfEntity::ATTRIBUTE_ID => $hash,
-            PdfEntity::ATTRIBUTE_URL => $publicUrl,
-            PdfEntity::ATTRIBUTE_SIZE => $size,
-            PdfEntity::ATTRIBUTE_MIMETYPE => 'application/pdf',
-            PdfEntity::ATTRIBUTE_CONTENT => $content,
-            PdfEntity::ATTRIBUTE_CREATED_AT => $this->storageManager->lastModified($filename),
+        return PdfData::fillFromArray([
+            PdfData::ATTRIBUTE_ID => $hash,
+            PdfData::ATTRIBUTE_URL => $publicUrl,
+            PdfData::ATTRIBUTE_SIZE => $size,
+            PdfData::ATTRIBUTE_MIMETYPE => 'application/pdf',
+            PdfData::ATTRIBUTE_CONTENT => $content,
+            PdfData::ATTRIBUTE_CREATED_AT => $this->storageManager->lastModified($filename),
         ]);
     }
 

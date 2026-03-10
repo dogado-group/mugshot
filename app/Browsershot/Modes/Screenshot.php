@@ -6,7 +6,7 @@ namespace App\Browsershot\Modes;
 
 use App\Browsershot\BrowsershotFactory;
 use App\Contracts\CapturableInterface;
-use App\Entity\Screenshot as ScreenshotEntity;
+use App\DataTransferObject\ScreenshotData;
 use App\Support\Utils;
 use Illuminate\Support\Str;
 use League\MimeTypeDetection\GeneratedExtensionToMimeTypeMap;
@@ -20,7 +20,7 @@ class Screenshot extends BrowsershotFactory implements CapturableInterface
      * @throws \Spatie\Browsershot\Exceptions\CouldNotTakeBrowsershot
      * @throws \Spatie\TemporaryDirectory\Exceptions\PathAlreadyExists
      */
-    public function execute(): ScreenshotEntity
+    public function execute(): ScreenshotData
     {
         $hash = hash('sha256', Str::slug(Utils::sanitizeUrl($this->url), '_'));
         $filename = "{$hash}.{$this->fileExtension}";
@@ -35,13 +35,13 @@ class Screenshot extends BrowsershotFactory implements CapturableInterface
 
         $size = $this->storageManager->size($filename);
 
-        return (new ScreenshotEntity())->fill([
-            ScreenshotEntity::ATTRIBUTE_ID => $hash,
-            ScreenshotEntity::ATTRIBUTE_URL => $publicUrl,
-            ScreenshotEntity::ATTRIBUTE_SIZE => $size,
-            ScreenshotEntity::ATTRIBUTE_MIMETYPE => $mimeType,
-            ScreenshotEntity::ATTRIBUTE_CONTENT => $content,
-            ScreenshotEntity::ATTRIBUTE_CREATED_AT => $this->storageManager->lastModified($filename),
+        return ScreenshotData::fillFromArray([
+            ScreenshotData::ATTRIBUTE_ID => $hash,
+            ScreenshotData::ATTRIBUTE_URL => $publicUrl,
+            ScreenshotData::ATTRIBUTE_SIZE => $size,
+            ScreenshotData::ATTRIBUTE_MIMETYPE => $mimeType,
+            ScreenshotData::ATTRIBUTE_CONTENT => $content,
+            ScreenshotData::ATTRIBUTE_CREATED_AT => $this->storageManager->lastModified($filename),
         ]);
     }
 

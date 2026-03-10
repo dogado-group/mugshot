@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Resources;
 
-use App\Entity\Screenshot as ScreenshotModel;
+use App\DataTransferObject\ScreenshotData;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class Screenshot extends JsonResource
@@ -12,7 +12,7 @@ class Screenshot extends JsonResource
     /**
      * The resource instance.
      *
-     * @var ScreenshotModel
+     * @var ScreenshotData
      */
     public $resource;
 
@@ -27,10 +27,10 @@ class Screenshot extends JsonResource
     {
         return [
             'type' => 'screenshot',
-            'id' => $this->resource->getId(),
+            'id' => $this->resource->id,
             'attributes' => [
-                ScreenshotModel::ATTRIBUTE_URL => $this->resource->getUrl(),
-                ScreenshotModel::ATTRIBUTE_CREATED_AT => $this->resource->getCreatedAt()->toAtomString(),
+                ScreenshotData::ATTRIBUTE_URL => $this->resource->url,
+                ScreenshotData::ATTRIBUTE_CREATED_AT => $this->resource->createdAt->toAtomString(),
             ],
         ];
     }

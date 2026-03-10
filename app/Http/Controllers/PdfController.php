@@ -8,7 +8,7 @@ use App\Browsershot\BrowsershotService;
 use App\Contracts\FileInterface;
 use App\Contracts\ResponsableInterface;
 use App\Exceptions\GenericBrowsershotException;
-use App\Http\Requests\GeneratePdfRequest;
+use App\Http\Requests\PdfRequest;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Symfony\Component\Process\Exception\ProcessFailedException;
@@ -19,19 +19,15 @@ class PdfController extends Controller implements ResponsableInterface
     {
     }
 
-    public function generate(GeneratePdfRequest $request): Response
+    public function generate(PdfRequest $request): Response
     {
-        $response = $request->get('response', ResponsableInterface::INLINE);
-        $content = $request->get('content');
-        $parameters = Collection::make();
-
         try {
-            $content = $this->service->execute(BrowsershotService::TYPE_PDF, $content, $parameters);
+            $content = $this->service->execute(BrowsershotService::TYPE_PDF, $request->content(), Collection::make());
         } catch (ProcessFailedException $exception) {
             throw new GenericBrowsershotException('Generating pdf failed', $exception);
         }
 
-        return $this->makeResponse($content, $response);
+        return $this->makeResponse($content, $request->responseType());
     }
 
     protected function makeResponse(FileInterface $resource, string $type = ResponsableInterface::INLINE): Response

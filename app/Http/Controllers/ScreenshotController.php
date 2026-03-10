@@ -8,10 +8,9 @@ use App\Browsershot\BrowsershotService;
 use App\Contracts\FileInterface;
 use App\Contracts\ResponsableInterface;
 use App\Exceptions\GenericBrowsershotException;
-use App\Http\Requests\GenerateScreenshotRequest;
+use App\Http\Requests\ScreenshotRequest;
 use App\Http\Resources\Screenshot as ScreenshotResource;
 use Illuminate\Http\Response;
-use Illuminate\Support\Collection;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class ScreenshotController extends Controller implements ResponsableInterface
@@ -20,21 +19,15 @@ class ScreenshotController extends Controller implements ResponsableInterface
     {
     }
 
-    public function generate(GenerateScreenshotRequest $request): Response|ScreenshotResource
+    public function generate(ScreenshotRequest $request): Response|ScreenshotResource
     {
-        $response = $request->get('response', ResponsableInterface::INLINE);
-        $url = $request->get('url');
-        $parameters = Collection::make(
-            $request->only('width', 'height', 'fullPage', 'deviceScale', 'quality', 'delay', 'fileExtension')
-        );
-
         try {
-            $content = $this->service->execute(BrowsershotService::TYPE_SCREENSHOT, $url, $parameters);
+            $content = $this->service->execute(BrowsershotService::TYPE_SCREENSHOT, $request->url(), $request->parameters());
         } catch (ProcessFailedException $exception) {
-            throw new GenericBrowsershotException("Generating a screenshot of {$url} failed", $exception);
+            throw new GenericBrowsershotException("Generating a screenshot of {$request->url()} failed", $exception);
         }
 
-        return $this->makeResponse($content, $response);
+        return $this->makeResponse($content, $request->responseType());
     }
 
     protected function makeResponse(FileInterface $resource, string $type = ResponsableInterface::INLINE): Response|ScreenshotResource
