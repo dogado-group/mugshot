@@ -4,11 +4,18 @@ declare(strict_types=1);
 
 namespace App\Support;
 
-class Utils
+final class Utils
 {
     public static function sanitizeUrl(string $url): string
     {
-        $urlArr = parse_url($url);
-        return implode('', array_splice($urlArr, 1));
+        $parts = parse_url($url);
+
+        if ($parts === false) {
+            return '';
+        }
+
+        unset($parts['scheme']);
+
+        return implode('', $parts);
     }
 }
