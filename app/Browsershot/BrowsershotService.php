@@ -22,6 +22,7 @@ class BrowsershotService
         protected ScreenshotFactory $screenshotFactory
     ) {}
 
+    /** @param Collection<string, mixed> $parameters */
     public function execute(string $type, string $input, Collection $parameters): ?FileInterface
     {
         $type = Str::lower($type);
@@ -33,6 +34,7 @@ class BrowsershotService
         };
     }
 
+    /** @param Collection<string, mixed> $parameters */
     protected function screenshot(string $url, Collection $parameters): FileInterface
     {
         $factory = $this->screenshotFactory;
@@ -57,7 +59,8 @@ class BrowsershotService
         return $factory->execute();
     }
 
-    protected function pdf(string $content, Collection $parameters)
+    /** @param Collection<string, mixed> $parameters */
+    protected function pdf(string $content, Collection $parameters): FileInterface
     {
         $factory = $this->pdfFactory;
         $factory->setContent($content);

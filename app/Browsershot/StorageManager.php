@@ -16,7 +16,7 @@ use League\Flysystem\StorageAttributes;
  * @method get(string $filename)
  * @method size(string $filename)
  * @method url(string $fileName)
- * @method delete(string|array $path)
+ * @method delete(string|array<int, string> $path)
  * @method readStream(string $path)
  */
 class StorageManager
@@ -54,7 +54,7 @@ class StorageManager
             return null;
         }
 
-        return $this->storage->mimeType($file);
+        return $this->storage->mimeType($file) ?: null;
     }
 
     public function isExpired(string $file): bool
@@ -63,6 +63,7 @@ class StorageManager
             && $this->lastModified($file)->diffInMinutes(new Carbon()) > config('mugshot.cache');
     }
 
+    /** @return Collection<int, StorageAttributes> */
     public function listContent(): Collection
     {
         $driver = $this->storage->getDriver();
@@ -72,7 +73,10 @@ class StorageManager
             ->toArray());
     }
 
-    public function __call($method, array $parameters)
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function __call(string $method, array $parameters): mixed
     {
         return $this->storage->{$method}(...array_values($parameters));
     }

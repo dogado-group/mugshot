@@ -14,7 +14,7 @@ class CreateUser extends Command
 
     protected $description = 'Create a user with API Key';
 
-    public function handle()
+    public function handle(): int|null
     {
         $name = $this->option('name');
         $email = $this->option('email');

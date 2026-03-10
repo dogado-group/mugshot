@@ -86,5 +86,5 @@ abstract class BrowsershotFactory
         return $this;
     }
 
-    abstract protected function execute();
+    abstract protected function execute(): \App\Contracts\FileInterface;
 }

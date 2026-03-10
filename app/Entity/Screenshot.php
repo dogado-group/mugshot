@@ -30,6 +30,7 @@ class Screenshot implements FileInterface
 
     public ?Carbon $createdAt = null;
 
+    /** @param array<string, mixed> $parameters */
     public function fill(array $parameters): self
     {
         $this->setId(Arr::get($parameters, self::ATTRIBUTE_ID));

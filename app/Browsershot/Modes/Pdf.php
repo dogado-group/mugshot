@@ -35,6 +35,9 @@ class Pdf extends BrowsershotFactory
         ]);
     }
 
+    /**
+     * @return array{string, string|false}
+     */
     protected function doPdf(string $filename, string $hash): array
     {
         $tempFile = (new TemporaryDirectory())->create();

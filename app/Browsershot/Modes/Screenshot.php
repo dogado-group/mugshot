@@ -48,6 +48,7 @@ class Screenshot extends BrowsershotFactory implements CapturableInterface
     /**
      * @throws \Spatie\TemporaryDirectory\Exceptions\PathAlreadyExists
      * @throws \Spatie\Browsershot\Exceptions\CouldNotTakeBrowsershot
+     * @return array{string|null, string, string|false}
      */
     protected function doScreenshot(string $filename, string $hash): array
     {

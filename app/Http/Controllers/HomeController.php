@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Redirect;
 
 class HomeController extends Controller
 {
-    public function index()
+    public function index(): \Illuminate\Http\RedirectResponse
     {
         if (App::environment('local')) {
             abort(404);
