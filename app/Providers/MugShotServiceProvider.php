@@ -57,7 +57,7 @@ class MugShotServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->publishes([
-            $this->configFile => config_path('mugshot.php')
+            $this->configFile => config_path('mugshot.php'),
         ], 'config');
     }
 

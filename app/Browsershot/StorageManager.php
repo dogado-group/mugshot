@@ -6,9 +6,9 @@ namespace App\Browsershot;
 
 use Carbon\Carbon;
 use Illuminate\Contracts\Filesystem\Filesystem as FilesystemContract;
+use Illuminate\Http\File;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\File;
 use League\Flysystem\StorageAttributes;
 
 /**
@@ -33,9 +33,10 @@ class StorageManager
     public function save(string $tempFilePath, string $name, string $fileExtension): string
     {
         $file = new File($tempFilePath);
-        $fileName = $name . '.' . $fileExtension;
+        $fileName = $name.'.'.$fileExtension;
 
         $this->storage->putFileAs('', $file, $fileName);
+
         return $this->url($fileName);
     }
 

@@ -23,10 +23,6 @@ abstract class BrowsershotFactory
 
     protected int $delay = 0;
 
-    /**
-     * @param Browsershot $browsershot
-     * @param StorageManager $storageManager
-     */
     public function __construct(protected Browsershot $browsershot, protected StorageManager $storageManager)
     {
     }
@@ -36,6 +32,7 @@ abstract class BrowsershotFactory
         $this->width = $width;
         $this->height = $height;
         $this->browsershot->windowSize($width, $height);
+
         return $this;
     }
 
@@ -47,6 +44,7 @@ abstract class BrowsershotFactory
 
         $this->fileExtension = $extension;
         $this->browsershot->setScreenshotType($extension);
+
         return $this;
     }
 
@@ -58,6 +56,7 @@ abstract class BrowsershotFactory
 
         $this->imageQuality = $quality;
         $this->browsershot->setScreenshotType($this->fileExtension, $quality);
+
         return $this;
     }
 
@@ -65,6 +64,7 @@ abstract class BrowsershotFactory
     {
         $this->deviceScale = $deviceScale;
         $this->browsershot->deviceScaleFactor($deviceScale);
+
         return $this;
     }
 
@@ -72,6 +72,7 @@ abstract class BrowsershotFactory
     {
         $this->fullPage = $fullPage;
         $this->browsershot->setOption('fullPage', $fullPage);
+
         return $this;
     }
 
@@ -83,8 +84,9 @@ abstract class BrowsershotFactory
 
         $this->delay = $seconds;
         $this->browsershot->setDelay($seconds * 1000);
+
         return $this;
     }
 
-    abstract protected function execute(): \App\Contracts\FileInterface;
+    abstract protected function execute(): FileInterface;
 }

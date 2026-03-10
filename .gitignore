@@ -31,3 +31,4 @@ npm-debug.log
 .vscode
 *.swp
 Thumbs.db
+.php-cs-fixer.cache

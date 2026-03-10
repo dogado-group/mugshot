@@ -1,12 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Spatie\Health\Checks\Checks\DebugModeCheck;
-use Spatie\Health\Facades\Health;
 use Spatie\Health\Checks\Checks\UsedDiskSpaceCheck;
-use Spatie\Health\Checks\Checks\DatabaseCheck;
+use Spatie\Health\Facades\Health;
 
 class HealthCheckServiceProvider extends ServiceProvider
 {
@@ -19,7 +20,7 @@ class HealthCheckServiceProvider extends ServiceProvider
     {
         Health::checks([
             DebugModeCheck::new(),
-            UsedDiskSpaceCheck::new()
+            UsedDiskSpaceCheck::new(),
         ]);
     }
 
@@ -30,6 +31,5 @@ class HealthCheckServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
     }
 }

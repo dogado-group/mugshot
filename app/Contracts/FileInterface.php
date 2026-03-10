@@ -11,8 +11,9 @@ interface FileInterface
 
     public const ALLOWED_SCREENSHOT_EXTENSIONS = [
         self::IMAGE_JPEG,
-        self::IMAGE_PNG
+        self::IMAGE_PNG,
     ];
+
     public function getMimeType(): string;
 
     public function getSize(): int;

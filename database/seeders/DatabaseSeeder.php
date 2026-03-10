@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -20,6 +22,6 @@ class DatabaseSeeder extends Seeder
         /** @var User $user */
         $user = User::factory()->create();
         $token = $user->createToken('foobar');
-        $this->command->info(' -> default user token: ' . $token->plainTextToken);
+        $this->command->info(' -> default user token: '.$token->plainTextToken);
     }
 }

@@ -6,10 +6,8 @@ namespace App\Browsershot\Modes;
 
 use App\Browsershot\BrowsershotFactory;
 use App\Entity\Pdf as PdfEntity;
-use App\Support\Utils;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
-use League\MimeTypeDetection\GeneratedExtensionToMimeTypeMap;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
 
 class Pdf extends BrowsershotFactory
@@ -31,7 +29,7 @@ class Pdf extends BrowsershotFactory
             PdfEntity::ATTRIBUTE_SIZE => $size,
             PdfEntity::ATTRIBUTE_MIMETYPE => 'application/pdf',
             PdfEntity::ATTRIBUTE_CONTENT => $content,
-            PdfEntity::ATTRIBUTE_CREATED_AT => $this->storageManager->lastModified($filename)
+            PdfEntity::ATTRIBUTE_CREATED_AT => $this->storageManager->lastModified($filename),
         ]);
     }
 
@@ -50,6 +48,7 @@ class Pdf extends BrowsershotFactory
         $publicUrl = $this->storageManager->save($tempFilePath, $hash, 'pdf');
 
         $tempFile->delete();
+
         return [$publicUrl, $content];
     }
 

@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests;
 
 use Faker\Generator;
 use Illuminate\Foundation\Testing\WithFaker;
-use Orchestra\Testbench\TestCase;
 use Mockery as m;
+use Orchestra\Testbench\TestCase;
 
 class OrchestraTestCase extends TestCase
 {
@@ -22,9 +24,6 @@ class OrchestraTestCase extends TestCase
         m::close();
     }
 
-    /**
-     * @return Generator
-     */
     public function getFaker(): Generator
     {
         return $this->faker;
