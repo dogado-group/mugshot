@@ -20,9 +20,6 @@ class ScreenshotController extends Controller implements ResponsableInterface
     {
     }
 
-    /**
-     * @return ScreenshotResource|Response
-     */
     public function generate(GenerateScreenshotRequest $request): Response|ScreenshotResource
     {
         $response = $request->get('response', ResponsableInterface::INLINE);
@@ -40,9 +37,6 @@ class ScreenshotController extends Controller implements ResponsableInterface
         return $this->makeResponse($content, $response);
     }
 
-    /**
-     * @return ScreenshotResource|Response
-     */
     protected function makeResponse(FileInterface $resource, string $type = ResponsableInterface::INLINE): Response|ScreenshotResource
     {
         return match ($type) {
@@ -61,7 +55,7 @@ class ScreenshotController extends Controller implements ResponsableInterface
     {
         $headers = [
             'Content-Type' => $resource->getMimeType(),
-            'Content-Disposition' => self::INLINE
+            'Content-Disposition' => self::INLINE,
         ];
 
         return new Response($resource->getContent(), Response::HTTP_OK, $headers);
@@ -72,7 +66,7 @@ class ScreenshotController extends Controller implements ResponsableInterface
         $headers = [
             'Content-Type' => $resource->getMimeType(),
             'Content-Length' => $resource->getSize(),
-            'Content-Disposition' => 'attachment; filename="'. $resource->getFilename() .'"'
+            'Content-Disposition' => 'attachment; filename="'.$resource->getFilename().'"',
         ];
 
         return new Response($resource->getContent(), Response::HTTP_OK, $headers);

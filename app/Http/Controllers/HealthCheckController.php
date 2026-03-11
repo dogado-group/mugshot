@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -23,8 +25,9 @@ class HealthCheckController extends Controller
 
         $headers = [
             'Content-Type' => 'application/json',
-            'Cache-Control' => 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0'
+            'Cache-Control' => 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0',
         ];
+
         return new Response($checkResults->allChecksOk(), $status, $headers);
     }
 }

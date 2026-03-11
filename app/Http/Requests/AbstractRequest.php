@@ -17,6 +17,7 @@ class AbstractRequest extends FormRequest
 
         return auth()->check();
     }
+
     /**
      * @return array<mixed>
      */

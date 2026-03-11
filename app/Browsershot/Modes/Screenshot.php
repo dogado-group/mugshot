@@ -35,17 +35,19 @@ class Screenshot extends BrowsershotFactory implements CapturableInterface
 
         $size = $this->storageManager->size($filename);
 
-        return (new ScreenshotEntity)->fill([
+        return (new ScreenshotEntity())->fill([
             ScreenshotEntity::ATTRIBUTE_ID => $hash,
             ScreenshotEntity::ATTRIBUTE_URL => $publicUrl,
             ScreenshotEntity::ATTRIBUTE_SIZE => $size,
             ScreenshotEntity::ATTRIBUTE_MIMETYPE => $mimeType,
             ScreenshotEntity::ATTRIBUTE_CONTENT => $content,
-            ScreenshotEntity::ATTRIBUTE_CREATED_AT => $this->storageManager->lastModified($filename)
+            ScreenshotEntity::ATTRIBUTE_CREATED_AT => $this->storageManager->lastModified($filename),
         ]);
     }
 
     /**
+     * @return array{string|null, string, string|false}
+     *
      * @throws \Spatie\TemporaryDirectory\Exceptions\PathAlreadyExists
      * @throws \Spatie\Browsershot\Exceptions\CouldNotTakeBrowsershot
      */
@@ -63,6 +65,7 @@ class Screenshot extends BrowsershotFactory implements CapturableInterface
         $content = file_get_contents($tempFilePath);
 
         $tempFile->delete();
+
         return [$mimeType, $publicUrl, $content];
     }
 
@@ -80,6 +83,7 @@ class Screenshot extends BrowsershotFactory implements CapturableInterface
     {
         $this->url = $url;
         $this->browsershot->setUrl($url);
+
         return $this;
     }
 

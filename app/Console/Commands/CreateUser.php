@@ -14,7 +14,7 @@ class CreateUser extends Command
 
     protected $description = 'Create a user with API Key';
 
-    public function handle()
+    public function handle(): ?int
     {
         $name = $this->option('name');
         $email = $this->option('email');
@@ -30,20 +30,20 @@ class CreateUser extends Command
             return 0;
         }
 
-        $this->info("[Mugshot] Creating account for ${name}");
+        $this->info("[Mugshot] Creating account for {$name}");
 
         $user = User::create([
             'name' => $name,
             'email' => $email,
             'password' => Str::random(32),
-            'email_verified_at' => now()
+            'email_verified_at' => now(),
         ]);
         $token = $user->createToken('API Access');
 
         $this->info('[Mugshot] You can now use this account:');
-        $this->line('Name:  ' . $user->name);
-        $this->line('Email: ' . $user->email);
-        $this->line('Token: ' . $token->plainTextToken);
+        $this->line('Name:  '.$user->name);
+        $this->line('Email: '.$user->email);
+        $this->line('Token: '.$token->plainTextToken);
 
         return 0;
     }

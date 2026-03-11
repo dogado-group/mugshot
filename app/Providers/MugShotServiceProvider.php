@@ -54,14 +54,15 @@ class MugShotServiceProvider extends ServiceProvider
         });
     }
 
-    public function boot()
+    public function boot(): void
     {
         $this->publishes([
-            $this->configFile => config_path('mugshot.php')
+            $this->configFile => config_path('mugshot.php'),
         ], 'config');
     }
 
-    public function provides()
+    /** @return array<string> */
+    public function provides(): array
     {
         return [Browsershot::class];
     }

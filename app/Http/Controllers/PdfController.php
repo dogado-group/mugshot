@@ -38,7 +38,7 @@ class PdfController extends Controller implements ResponsableInterface
     {
         return match ($type) {
             ResponsableInterface::DOWNLOAD => $this->responseDownload($resource),
-            default => $this->responseInline($resource)
+            default => $this->responseInline($resource),
         };
     }
 
@@ -46,7 +46,7 @@ class PdfController extends Controller implements ResponsableInterface
     {
         $headers = [
             'Content-Type' => $resource->getMimeType(),
-            'Content-Disposition' => self::INLINE
+            'Content-Disposition' => self::INLINE,
         ];
 
         return new Response($resource->getContent(), Response::HTTP_OK, $headers);
@@ -57,7 +57,7 @@ class PdfController extends Controller implements ResponsableInterface
         $headers = [
             'Content-Type' => $resource->getMimeType(),
             'Content-Length' => $resource->getSize(),
-            'Content-Disposition' => 'attachment; filename="'. $resource->getFilename() .'"'
+            'Content-Disposition' => 'attachment; filename="'.$resource->getFilename().'"',
         ];
 
         return new Response($resource->getContent(), Response::HTTP_OK, $headers);

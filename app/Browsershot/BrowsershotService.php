@@ -9,6 +9,7 @@ use App\Browsershot\Modes\Screenshot as ScreenshotFactory;
 use App\Contracts\FileInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use RuntimeException;
 use Spatie\Browsershot\Browsershot;
 
 class BrowsershotService
@@ -19,9 +20,11 @@ class BrowsershotService
     public function __construct(
         protected Browsershot $browsershot,
         protected PdfFactory $pdfFactory,
-        protected ScreenshotFactory $screenshotFactory
-    ) {}
+        protected ScreenshotFactory $screenshotFactory,
+    ) {
+    }
 
+    /** @param Collection<string, mixed> $parameters */
     public function execute(string $type, string $input, Collection $parameters): ?FileInterface
     {
         $type = Str::lower($type);
@@ -29,10 +32,11 @@ class BrowsershotService
         return match ($type) {
             self::TYPE_SCREENSHOT => $this->screenshot($input, $parameters),
             self::TYPE_PDF => $this->pdf($input, $parameters),
-            default => throw new \RuntimeException('Type method "' . $type . '" not implemented'),
+            default => throw new RuntimeException('Type method "'.$type.'" not implemented'),
         };
     }
 
+    /** @param Collection<string, mixed> $parameters */
     protected function screenshot(string $url, Collection $parameters): FileInterface
     {
         $factory = $this->screenshotFactory;
@@ -57,7 +61,8 @@ class BrowsershotService
         return $factory->execute();
     }
 
-    protected function pdf(string $content, Collection $parameters)
+    /** @param Collection<string, mixed> $parameters */
+    protected function pdf(string $content, Collection $parameters): FileInterface
     {
         $factory = $this->pdfFactory;
         $factory->setContent($content);

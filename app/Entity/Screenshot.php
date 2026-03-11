@@ -30,6 +30,7 @@ class Screenshot implements FileInterface
 
     public ?Carbon $createdAt = null;
 
+    /** @param array<string, mixed> $parameters */
     public function fill(array $parameters): self
     {
         $this->setId(Arr::get($parameters, self::ATTRIBUTE_ID));
@@ -50,6 +51,7 @@ class Screenshot implements FileInterface
     public function setId(string $id): self
     {
         $this->id = $id;
+
         return $this;
     }
 
@@ -61,6 +63,7 @@ class Screenshot implements FileInterface
     public function setUrl(string $url): self
     {
         $this->url = $url;
+
         return $this;
     }
 
@@ -72,6 +75,7 @@ class Screenshot implements FileInterface
     public function setSize(int $size): self
     {
         $this->size = $size;
+
         return $this;
     }
 
@@ -83,6 +87,7 @@ class Screenshot implements FileInterface
     public function setMimeType(string $mimeType): self
     {
         $this->mimeType = $mimeType;
+
         return $this;
     }
 
@@ -104,6 +109,7 @@ class Screenshot implements FileInterface
     public function setContent(string $content): self
     {
         $this->content = $content;
+
         return $this;
     }
 
@@ -115,6 +121,7 @@ class Screenshot implements FileInterface
     public function setCreatedAt(Carbon $createdAt): self
     {
         $this->createdAt = $createdAt;
+
         return $this;
     }
 }

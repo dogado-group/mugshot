@@ -15,7 +15,7 @@ class GeneratePdfRequest extends AbstractRequest
             'content' => ['required'],
             'response' => [
                 'sometimes',
-                Rule::in(ResponsableInterface::ALLOWED_RESPONSES)
+                Rule::in(ResponsableInterface::ALLOWED_RESPONSES),
             ],
         ];
     }
