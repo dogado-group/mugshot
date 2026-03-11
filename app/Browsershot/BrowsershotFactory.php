@@ -26,8 +26,8 @@ abstract class BrowsershotFactory
     protected int $delay = 0;
 
     public function __construct(
-        protected Browsershot $browsershot,
-        protected StorageManager $storageManager,
+        protected readonly Browsershot $browsershot,
+        protected readonly StorageManager $storageManager,
     ) {
     }
 
@@ -98,6 +98,8 @@ abstract class BrowsershotFactory
             $tempDir->delete();
         }
     }
+
+    abstract protected function identifier(): string;
 
     abstract public function execute(): FileInterface;
 }

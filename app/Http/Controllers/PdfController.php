@@ -14,7 +14,7 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class PdfController extends Controller implements ResponsableInterface
 {
-    public function __construct(protected BrowsershotService $service)
+    public function __construct(protected readonly BrowsershotService $service)
     {
     }
 

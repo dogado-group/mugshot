@@ -8,14 +8,13 @@ use App\Browsershot\BrowsershotFactory;
 use App\DataTransferObject\PdfData;
 use Illuminate\Support\Str;
 use RuntimeException;
+use Spatie\TemporaryDirectory\Exceptions\PathAlreadyExists;
 
 class Pdf extends BrowsershotFactory
 {
-    private string $htmlContent = '';
-
     public function execute(): PdfData
     {
-        $hash = hash('sha256', Str::random());
+        $hash = $this->identifier();
         $filename = "{$hash}.pdf";
 
         [$publicUrl, $content] = $this->capture($filename, $hash);
@@ -30,9 +29,13 @@ class Pdf extends BrowsershotFactory
         ]);
     }
 
+    protected function identifier(): string
+    {
+        return hash('sha256', Str::random());
+    }
+
     public function setContent(string $content): static
     {
-        $this->htmlContent = $content;
         $this->browsershot->setHtml($content);
 
         return $this;
@@ -41,7 +44,7 @@ class Pdf extends BrowsershotFactory
     /**
      * @return array{string, string}
      *
-     * @throws \Spatie\TemporaryDirectory\Exceptions\PathAlreadyExists
+     * @throws PathAlreadyExists
      */
     private function capture(string $filename, string $hash): array
     {

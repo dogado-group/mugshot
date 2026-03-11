@@ -13,8 +13,8 @@ use Illuminate\Support\Collection;
 class BrowsershotService
 {
     public function __construct(
-        protected PdfFactory $pdfFactory,
-        protected ScreenshotFactory $screenshotFactory,
+        protected readonly PdfFactory $pdfFactory,
+        protected readonly ScreenshotFactory $screenshotFactory,
     ) {
     }
 

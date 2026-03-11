@@ -11,18 +11,20 @@ use App\Support\Utils;
 use Illuminate\Support\Str;
 use League\MimeTypeDetection\GeneratedExtensionToMimeTypeMap;
 use RuntimeException;
+use Spatie\Browsershot\Exceptions\CouldNotTakeBrowsershot;
+use Spatie\TemporaryDirectory\Exceptions\PathAlreadyExists;
 
 class Screenshot extends BrowsershotFactory implements CapturableInterface
 {
     private string $url = 'https://localhost';
 
     /**
-     * @throws \Spatie\Browsershot\Exceptions\CouldNotTakeBrowsershot
-     * @throws \Spatie\TemporaryDirectory\Exceptions\PathAlreadyExists
+     * @throws CouldNotTakeBrowsershot
+     * @throws PathAlreadyExists
      */
     public function execute(): ScreenshotData
     {
-        $hash = hash('sha256', Str::slug(Utils::sanitizeUrl($this->url), '_'));
+        $hash = $this->identifier();
         $filename = "{$hash}.{$this->fileExtension}";
 
         if ($this->needsCapture($filename)) {
@@ -51,6 +53,11 @@ class Screenshot extends BrowsershotFactory implements CapturableInterface
         return $this;
     }
 
+    protected function identifier(): string
+    {
+        return hash('sha256', Str::slug(Utils::sanitizeUrl($this->url), '_'));
+    }
+
     private function needsCapture(string $filename): bool
     {
         return !$this->storageManager->exists($filename) || $this->storageManager->isExpired($filename);
@@ -59,8 +66,8 @@ class Screenshot extends BrowsershotFactory implements CapturableInterface
     /**
      * @return array{string|null, string, string}
      *
-     * @throws \Spatie\Browsershot\Exceptions\CouldNotTakeBrowsershot
-     * @throws \Spatie\TemporaryDirectory\Exceptions\PathAlreadyExists
+     * @throws CouldNotTakeBrowsershot
+     * @throws PathAlreadyExists
      */
     private function capture(string $filename, string $hash): array
     {
