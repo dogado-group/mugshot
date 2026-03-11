@@ -22,7 +22,7 @@ class ScreenshotController extends Controller implements ResponsableInterface
     public function generate(ScreenshotRequest $request): Response|ScreenshotResource
     {
         try {
-            $content = $this->service->execute(BrowsershotService::TYPE_SCREENSHOT, $request->url(), $request->parameters());
+            $content = $this->service->screenshot($request->url(), $request->parameters());
         } catch (ProcessFailedException $exception) {
             throw new GenericBrowsershotException("Generating a screenshot of {$request->url()} failed", $exception);
         }

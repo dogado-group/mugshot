@@ -25,7 +25,8 @@ class PdfData implements FileInterface
         public readonly string $mimeType,
         public readonly string $content,
         public readonly Carbon $createdAt,
-    ) {}
+    ) {
+    }
 
     /** @param array<string, mixed> $parameters */
     public static function fillFromArray(array $parameters): self

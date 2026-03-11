@@ -6,62 +6,57 @@ namespace App\Browsershot\Modes;
 
 use App\Browsershot\BrowsershotFactory;
 use App\DataTransferObject\PdfData;
-use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
-use Spatie\TemporaryDirectory\TemporaryDirectory;
+use RuntimeException;
 
 class Pdf extends BrowsershotFactory
 {
-    public HtmlString $content;
+    private string $htmlContent = '';
 
     public function execute(): PdfData
     {
         $hash = hash('sha256', Str::random());
         $filename = "{$hash}.pdf";
 
-        [$publicUrl, $content] = $this->doPdf($filename, $hash);
-
-        $size = $this->storageManager->size($filename);
+        [$publicUrl, $content] = $this->capture($filename, $hash);
 
         return PdfData::fillFromArray([
             PdfData::ATTRIBUTE_ID => $hash,
             PdfData::ATTRIBUTE_URL => $publicUrl,
-            PdfData::ATTRIBUTE_SIZE => $size,
+            PdfData::ATTRIBUTE_SIZE => $this->storageManager->size($filename),
             PdfData::ATTRIBUTE_MIMETYPE => 'application/pdf',
             PdfData::ATTRIBUTE_CONTENT => $content,
             PdfData::ATTRIBUTE_CREATED_AT => $this->storageManager->lastModified($filename),
         ]);
     }
 
-    /**
-     * @return array{string, string|false}
-     */
-    protected function doPdf(string $filename, string $hash): array
+    public function setContent(string $content): static
     {
-        $tempFile = (new TemporaryDirectory())->create();
-        $tempFilePath = $tempFile->path($filename);
-
-        // do the puppeteer magic
-        $this->callPuppeteer($tempFile->path($filename));
-
-        $content = file_get_contents($tempFilePath);
-        $publicUrl = $this->storageManager->save($tempFilePath, $hash, 'pdf');
-
-        $tempFile->delete();
-
-        return [$publicUrl, $content];
-    }
-
-    protected function callPuppeteer(string $tempFile): void
-    {
-        $this->browsershot->savePdf($tempFile);
-    }
-
-    public function setContent(string $content): self
-    {
-        $this->content = new HtmlString($content);
-        $this->browsershot->setHtml($this->content->toHtml());
+        $this->htmlContent = $content;
+        $this->browsershot->setHtml($content);
 
         return $this;
+    }
+
+    /**
+     * @return array{string, string}
+     *
+     * @throws \Spatie\TemporaryDirectory\Exceptions\PathAlreadyExists
+     */
+    private function capture(string $filename, string $hash): array
+    {
+        return $this->withTempFile($filename, function (string $tempFilePath) use ($hash): array {
+            $this->browsershot->savePdf($tempFilePath);
+
+            $content = file_get_contents($tempFilePath);
+
+            if ($content === false) {
+                throw new RuntimeException("Failed to read generated PDF: {$tempFilePath}");
+            }
+
+            $publicUrl = $this->storageManager->save($tempFilePath, $hash, 'pdf');
+
+            return [$publicUrl, $content];
+        });
     }
 }
