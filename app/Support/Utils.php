@@ -10,12 +10,36 @@ final class Utils
     {
         $parts = parse_url($url);
 
-        if ($parts === false) {
+        if ($parts === false || $parts === []) {
             return '';
         }
 
-        unset($parts['scheme']);
+        $result = '';
 
-        return implode('', $parts);
+        if (isset($parts['user'])) {
+            $result .= $parts['user'];
+            if (isset($parts['pass'])) {
+                $result .= ':'.$parts['pass'];
+            }
+            $result .= '@';
+        }
+
+        $result .= $parts['host'] ?? '';
+
+        if (isset($parts['port'])) {
+            $result .= ':'.$parts['port'];
+        }
+
+        $result .= $parts['path'] ?? '';
+
+        if (isset($parts['query'])) {
+            $result .= '?'.$parts['query'];
+        }
+
+        if (isset($parts['fragment'])) {
+            $result .= '#'.$parts['fragment'];
+        }
+
+        return $result;
     }
 }

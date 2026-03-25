@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Browsershot;
 
-use Carbon\Carbon;
 use Illuminate\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Illuminate\Http\File;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use League\Flysystem\StorageAttributes;
@@ -21,9 +21,9 @@ use League\Flysystem\StorageAttributes;
  */
 class StorageManager
 {
-    protected FilesystemContract $storage;
+    public const string DISKNAME = 'screenshot';
 
-    public const DISKNAME = 'screenshot';
+    protected readonly FilesystemContract $storage;
 
     public function __construct()
     {
@@ -61,7 +61,7 @@ class StorageManager
     public function isExpired(string $file): bool
     {
         return $this->exists($file)
-            && $this->lastModified($file)->diffInMinutes(new Carbon()) > config('mugshot.cache');
+            && $this->lastModified($file)->diffInMinutes(now()) > config('mugshot.cache');
     }
 
     /** @return Collection<int, StorageAttributes> */
@@ -69,7 +69,7 @@ class StorageManager
     {
         $driver = $this->storage->getDriver();
 
-        return Collection::make($driver->listContents('', false)
+        return collect($driver->listContents('', false)
             ->filter(fn (StorageAttributes $attributes) => $attributes->isFile())
             ->toArray());
     }

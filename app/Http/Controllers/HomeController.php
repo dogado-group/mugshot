@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Redirect;
 
 class HomeController extends Controller
 {
-    public function index(): \Illuminate\Http\RedirectResponse
+    public function index(): RedirectResponse
     {
         if (App::environment('local')) {
             abort(404);

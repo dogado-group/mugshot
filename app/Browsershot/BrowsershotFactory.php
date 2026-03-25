@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Browsershot;
 
 use App\Contracts\FileInterface;
+use Closure;
 use Spatie\Browsershot\Browsershot;
+use Spatie\TemporaryDirectory\TemporaryDirectory;
 
 abstract class BrowsershotFactory
 {
@@ -23,11 +25,13 @@ abstract class BrowsershotFactory
 
     protected int $delay = 0;
 
-    public function __construct(protected Browsershot $browsershot, protected StorageManager $storageManager)
-    {
+    public function __construct(
+        protected readonly Browsershot $browsershot,
+        protected readonly StorageManager $storageManager,
+    ) {
     }
 
-    public function setSize(int $width, int $height): self
+    public function setSize(int $width, int $height): static
     {
         $this->width = $width;
         $this->height = $height;
@@ -36,19 +40,15 @@ abstract class BrowsershotFactory
         return $this;
     }
 
-    public function setFileExtension(string $extension = FileInterface::IMAGE_PNG): self
+    public function setFileExtension(string $extension): static
     {
-        if ($extension === 'jpg') {
-            $extension = FileInterface::IMAGE_JPEG;
-        }
-
-        $this->fileExtension = $extension;
-        $this->browsershot->setScreenshotType($extension);
+        $this->fileExtension = $extension === 'jpg' ? FileInterface::IMAGE_JPEG : $extension;
+        $this->browsershot->setScreenshotType($this->fileExtension);
 
         return $this;
     }
 
-    public function setQuality(int $quality = 70): self
+    public function setQuality(int $quality): static
     {
         if ($this->fileExtension === FileInterface::IMAGE_PNG) {
             return $this;
@@ -60,7 +60,7 @@ abstract class BrowsershotFactory
         return $this;
     }
 
-    public function setDeviceScale(int $deviceScale): self
+    public function setDeviceScale(int $deviceScale): static
     {
         $this->deviceScale = $deviceScale;
         $this->browsershot->deviceScaleFactor($deviceScale);
@@ -68,7 +68,7 @@ abstract class BrowsershotFactory
         return $this;
     }
 
-    public function setFullPage(bool $fullPage): self
+    public function setFullPage(bool $fullPage): static
     {
         $this->fullPage = $fullPage;
         $this->browsershot->setOption('fullPage', $fullPage);
@@ -76,17 +76,30 @@ abstract class BrowsershotFactory
         return $this;
     }
 
-    public function setDelay(int $seconds): self
+    public function setDelay(int $seconds): static
     {
-        if ($seconds > 10) {
-            $seconds = 10;
-        }
-
-        $this->delay = $seconds;
-        $this->browsershot->setDelay($seconds * 1000);
+        $this->delay = min($seconds, (int) config('mugshot.validation.maxDelay'));
+        $this->browsershot->setDelay($this->delay * 1000);
 
         return $this;
     }
 
-    abstract protected function execute(): FileInterface;
+    /**
+     * Executes the given callback with a managed temporary file path,
+     * guaranteeing cleanup even when an exception is thrown.
+     */
+    protected function withTempFile(string $filename, Closure $callback): mixed
+    {
+        $tempDir = (new TemporaryDirectory())->create();
+
+        try {
+            return $callback($tempDir->path($filename));
+        } finally {
+            $tempDir->delete();
+        }
+    }
+
+    abstract protected function identifier(): string;
+
+    abstract public function execute(): FileInterface;
 }

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Contracts;
 
-use App\Entity\Screenshot;
+use App\DataTransferObject\ScreenshotData;
 
 interface CapturableInterface
 {
-    public function execute(): Screenshot;
+    public function execute(): ScreenshotData;
 }

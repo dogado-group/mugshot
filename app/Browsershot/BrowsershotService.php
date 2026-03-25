@@ -6,67 +6,44 @@ namespace App\Browsershot;
 
 use App\Browsershot\Modes\Pdf as PdfFactory;
 use App\Browsershot\Modes\Screenshot as ScreenshotFactory;
-use App\Contracts\FileInterface;
+use App\DataTransferObject\PdfData;
+use App\DataTransferObject\ScreenshotData;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
-use RuntimeException;
-use Spatie\Browsershot\Browsershot;
 
 class BrowsershotService
 {
-    public const TYPE_SCREENSHOT = 'screenshot';
-    public const TYPE_PDF = 'pdf';
-
     public function __construct(
-        protected Browsershot $browsershot,
-        protected PdfFactory $pdfFactory,
-        protected ScreenshotFactory $screenshotFactory,
+        protected readonly PdfFactory $pdfFactory,
+        protected readonly ScreenshotFactory $screenshotFactory,
     ) {
     }
 
     /** @param Collection<string, mixed> $parameters */
-    public function execute(string $type, string $input, Collection $parameters): ?FileInterface
+    public function screenshot(string $url, Collection $parameters): ScreenshotData
     {
-        $type = Str::lower($type);
-
-        return match ($type) {
-            self::TYPE_SCREENSHOT => $this->screenshot($input, $parameters),
-            self::TYPE_PDF => $this->pdf($input, $parameters),
-            default => throw new RuntimeException('Type method "'.$type.'" not implemented'),
-        };
-    }
-
-    /** @param Collection<string, mixed> $parameters */
-    protected function screenshot(string $url, Collection $parameters): FileInterface
-    {
-        $factory = $this->screenshotFactory;
-        $factory->setUrl($url);
-
-        $factory->setSize(
-            (int) $parameters->get('width', config('mugshot.defaults.width')),
-            (int) $parameters->get('height', config('mugshot.defaults.height'))
-        );
-
-        $factory->setFileExtension($parameters->get('fileExtension', config('mugshot.defaults.fileExtension')));
-        $factory->setQuality($parameters->get('quality', config('mugshot.defaults.quality')));
-        $factory->setDeviceScale($parameters->get('deviceScale', config('mugshot.defaults.deviceScale')));
+        $this->screenshotFactory
+            ->setUrl($url)
+            ->setSize(
+                (int) $parameters->get('width', config('mugshot.defaults.width')),
+                (int) $parameters->get('height', config('mugshot.defaults.height'))
+            )
+            ->setFileExtension($parameters->get('fileExtension', config('mugshot.defaults.fileExtension')))
+            ->setQuality((int) $parameters->get('quality', config('mugshot.defaults.quality')))
+            ->setDeviceScale((int) $parameters->get('deviceScale', config('mugshot.defaults.deviceScale')));
 
         if ($parameters->has('delay')) {
-            $factory->setDelay($parameters->get('delay'));
-        }
-        if ($parameters->has('fullPage')) {
-            $factory->setFullPage($parameters->get('fullPage'));
+            $this->screenshotFactory->setDelay((int) $parameters->get('delay'));
         }
 
-        return $factory->execute();
+        if ($parameters->has('fullPage')) {
+            $this->screenshotFactory->setFullPage((bool) $parameters->get('fullPage'));
+        }
+
+        return $this->screenshotFactory->execute();
     }
 
-    /** @param Collection<string, mixed> $parameters */
-    protected function pdf(string $content, Collection $parameters): FileInterface
+    public function pdf(string $content): PdfData
     {
-        $factory = $this->pdfFactory;
-        $factory->setContent($content);
-
-        return $factory->execute();
+        return $this->pdfFactory->setContent($content)->execute();
     }
 }
